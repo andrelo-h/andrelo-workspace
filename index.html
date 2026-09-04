@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Business Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface2: #1e2333;
+    --surface3: #252b3b;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.13);
+    --text: #e8eaf0;
+    --text-2: #8b90a0;
+    --text-3: #555d72;
+    --accent: #4f7ef8;
+    --accent-bg: rgba(79,126,248,0.12);
+    --accent-border: rgba(79,126,248,0.3);
+    --success: #34c77b;
+    --success-bg: rgba(52,199,123,0.1);
+    --warning: #f5a623;
+    --warning-bg: rgba(245,166,35,0.1);
+    --danger: #f04f59;
+    --danger-bg: rgba(240,79,89,0.1);
+    --pro: #a855f7;
+    --pro-bg: rgba(168,85,247,0.1);
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── Layout ── */
+  .app { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+    overflow-y: auto;
+  }
+
+  .sidebar-logo {
+    padding: 20px 18px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-logo .logo-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+  .sidebar-logo .logo-sub {
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: 2px;
+  }
+
+  .nav { padding: 12px 10px; flex: 1; }
+  .nav-section { margin-bottom: 20px; }
+  .nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 0 8px;
+    margin-bottom: 6px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: var(--text-2);
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+    margin-bottom: 1px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+  .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { background: var(--accent-bg); color: var(--accent); }
+  .nav-item .badge-count {
+    margin-left: auto;
+    background: var(--surface3);
+    color: var(--text-2);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 20px;
+    min-width: 18px;
+    text-align: center;
+  }
+  .nav-item.active .badge-count { background: var(--accent-bg); color: var(--accent); }
+
+  .sidebar-footer {
+    padding: 14px 18px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-3);
+  }
+
+  .main {
+    margin-left: 220px;
+    flex: 1;
+    padding: 28px 32px;
+    max-width: 1100px;
+  }
+
+  /* ── Panels ── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .page-header {
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.4px;
+  }
+  .page-sub { font-size: 13px; color: var(--text-2); margin-top: 4px; }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+
+  /* ── Metric cards ── */
+  .metric {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+  }
+  .metric .m-val {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .metric .m-lbl { font-size: 12px; color: var(--text-2); }
+  .metric .m-change { font-size: 11px; margin-top: 4px; }
+
+  /* ── Forms ── */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-grid.full { grid-template-columns: 1fr; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 12px; font-weight: 500; color: var(--text-2); }
+  .field.span2 { grid-column: 1 / -1; }
+
+  input[type=text], input[type=number], input[type=date], select, textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 8px 11px;
+    font-size: 13px;
+    color: var(--text);
+    font-family: inherit;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  textarea { resize: vertical; min-height: 72px; }
+  select option { background: var(--surface2); }
+  input::placeholder, textarea::placeholder { color: var(--text-3); }
+
+  input[type=range] {
+    accent-color: var(--accent);
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-strong);
+    background: var(--surface2);
+    color: var(--text);
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .btn:hover { background: var(--surface3); }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .btn.primary:hover { opacity: 0.88; }
+  .btn.ghost { background: none; border-color: transparent; color: var(--text-2); }
+  .btn.ghost:hover { background: var(--surface2); color: var(--text); }
+  .btn.danger { color: var(--danger); border-color: transparent; background: none; }
+  .btn.danger:hover { background: var(--danger-bg); }
+  .btn.sm { padding: 5px 10px; font-size: 12px; }
+  .btn.icon { padding: 6px; }
+
+  .btn-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+  /* ── Error ── */
+  .err { font-size: 12px; color: var(--danger); margin-top: 6px; min-height: 16px; }
+
+  /* ── Items / list rows ── */
+  .item-list { display: flex; flex-direction: column; gap: 6px; }
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.15s;
+  }
+  .item:hover { border-color: var(--border-strong); }
+  .item.column { flex-direction: column; align-items: stretch; }
+  .item-main { flex: 1; min-width: 0; }
+  .item-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .item-sub { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+  .item-actions { display: flex; gap: 4px; flex-shrink: 0; }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge.todo { background: var(--surface3); color: var(--text-2); }
+  .badge.progress { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
+  .badge.done { background: var(--success-bg); color: var(--success); }
+  .badge.lead { background: var(--warning-bg); color: var(--warning); }
+  .badge.prospect { background: var(--accent-bg); color: var(--accent); }
+  .badge.active { background: var(--success-bg); color: var(--success); }
+  .badge.retainer { background: var(--pro-bg); color: var(--pro); }
+  .badge.lost { background: var(--danger-bg); color: var(--danger); }
+  .badge.high { background: var(--danger-bg); color: var(--danger); }
+  .badge.med { background: var(--warning-bg); color: var(--warning); }
+  .badge.low { background: var(--success-bg); color: var(--success); }
+  .badge.ig { background: rgba(225,48,108,0.12); color: #e1306c; }
+  .badge.tiktok { background: rgba(0,242,234,0.1); color: #00f2ea; }
+  .badge.linkedin { background: var(--accent-bg); color: var(--accent); }
+  .badge.both { background: var(--pro-bg); color: var(--pro); }
+  .badge.fb { background: rgba(66,103,178,0.15); color: #6891d8; }
+  .badge.proof { background: var(--success-bg); color: var(--success); }
+  .badge.problem { background: var(--warning-bg); color: var(--warning); }
+  .badge.result { background: var(--pro-bg); color: var(--pro); }
+  .badge.insight { background: var(--accent-bg); color: var(--accent); }
+  .badge.process { background: rgba(20,184,166,0.12); color: #14b8a6; }
+
+  /* ── Progress bar ── */
+  .prog-track {
+    width: 100%;
+    height: 4px;
+    background: var(--surface3);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .prog-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+  .prog-fill.success { background: var(--success); }
+
+  /* ── Empty state ── */
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-3);
+    font-size: 13px;
+  }
+  .empty svg { width: 32px; height: 32px; margin-bottom: 10px; opacity: 0.4; display: block; margin-inline: auto; }
+
+  /* ── Divider ── */
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+  /* ── Filter bar ── */
+  .filter-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .filter-btn {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid var(--border-strong);
+    background: none;
+    color: var(--text-2);
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.12s, color 0.12s;
+  }
+  .filter-btn:hover { background: var(--surface2); color: var(--text); }
+  .filter-btn.active { background: var(--accent-bg); color: var(--accent); border-color: var(--accent-border); }
+
+  /* ── Schedule table ── */
+  .sched-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .sched-table th {
+    text-align: center;
+    padding: 6px 4px;
+    font-weight: 500;
+    color: var(--text-2);
+    font-size: 11px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sched-table th.row-label { text-align: left; }
+  .sched-table td { padding: 4px; }
+  .sched-table td.activity-name {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 8px;
+    white-space: nowrap;
+    color: var(--text-2);
+  }
+  .sched-table td.row-total {
+    text-align: center;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 6px 8px;
+    color: var(--text);
+  }
+  .sched-table input[type=number] {
+    padding: 5px 4px;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 6px;
+    min-width: 0;
+    width: 100%;
+  }
+  .sched-table input.actual { background: rgba(52,199,123,0.06); border-color: rgba(52,199,123,0.2); }
+  .sched-table tfoot td {
+    padding: 8px 4px;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+  }
+  .sched-table tfoot td.lbl { text-align: left; padding-left: 8px; color: var(--text-2); }
+
+  /* ── Revenue progress ── */
+  .rev-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .rev-label { font-size: 12px; color: var(--text-2); }
+  .rev-value { font-size: 13px; font-weight: 500; }
+
+  /* ── Priority checklist ── */
+  .priority-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    background: var(--surface2);
+    margin-bottom: 6px;
+  }
+  .priority-item input[type=checkbox] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+    border: none;
+    background: none;
+  }
+  .priority-item .p-text {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text);
+    word-break: break-word;
+  }
+  .priority-item.done .p-text { text-decoration: line-through; color: var(--text-3); }
+
+  /* ── Folder tree ── */
+  .tree { font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.8; }
+  .tree-item { cursor: default; }
+  .tree-dir { cursor: pointer; color: var(--accent); display: flex; align-items: center; gap: 4px; }
+  .tree-dir:hover { opacity: 0.8; }
+  .tree-file { color: var(--text-2); padding-left: 18px; }
+  .tree-children { padding-left: 20px; overflow: hidden; }
+
+  /* ── Routine blocks ── */
+  .routine-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    margin-bottom: 6px;
+    background: var(--surface2);
+  }
+  .routine-time { font-size: 12px; font-weight: 600; color: var(--text-3); min-width: 38px; padding-top: 1px; }
+  .routine-text { font-size: 13px; color: var(--text); flex: 1; }
+  .routine-item.accent { background: var(--accent-bg); }
+  .routine-item.accent .routine-time { color: var(--accent); }
+  .routine-item.pro { background: var(--pro-bg); }
+  .routine-item.pro .routine-time { color: var(--pro); }
+
+  /* ── Avatar ── */
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface3);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 10px 16px;
+    font-size: 13px;
+    color: var(--text);
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    .sidebar { width: 100%; height: auto; position: relative; flex-direction: row; overflow-x: auto; }
+    .app { flex-direction: column; }
+    .main { margin-left: 0; padding: 16px; }
+    .nav { display: flex; padding: 8px; }
+    .nav-section { margin: 0; display: flex; gap: 4px; }
+    .nav-label { display: none; }
+    .sidebar-logo { display: none; }
+    .grid4 { grid-template-columns: 1fr 1fr; }
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .sched-table { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ── Sidebar ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-name">My Workspace</div>
+    <div class="logo-sub">Freelance business OS</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-section">
+      <div class="nav-label">Overview</div>
+      <button class="nav-item active" onclick="nav('dashboard',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Work</div>
+      <button class="nav-item" onclick="nav('projects',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Projects
+        <span class="badge-count" id="nav-projects">0</span>
+      </button>
+      <button class="nav-item" onclick="nav('clients',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Clients
+        <span class="badge-count" id="nav-clients">0</span>
+      </button>
+      <button class="nav-item" onclick="nav('content',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        Content ideas
+        <span class="badge-count" id="nav-content">0</span>
+      </button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Planning</div>
+      <button class="nav-item" onclick="nav('schedule',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Weekly plan
+      </button>
+      <button class="nav-item" onclick="nav('folders',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+        Folder structure
+      </button>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    Data saved in your browser.<br>
+    <button class="btn ghost sm" onclick="exportData()" style="margin-top:8px;padding:4px 0">Export backup →</button>
+  </div>
+</aside>
+
+<!-- ── Main ── -->
+<main class="main">
+
+  <!-- Dashboard -->
+  <div id="panel-dashboard" class="panel active">
+    <div class="page-header">
+      <div class="page-title">Dashboard</div>
+      <div class="page-sub" id="dash-date">—</div>
+    </div>
+
+    <div class="grid4">
+      <div class="metric"><div class="m-val" id="d-projects">0</div><div class="m-lbl">Active projects</div></div>
+      <div class="metric"><div class="m-val" id="d-clients">0</div><div class="m-lbl">Clients & leads</div></div>
+      <div class="metric"><div class="m-val" id="d-revenue">$0</div><div class="m-lbl">Pipeline value</div></div>
+      <div class="metric"><div class="m-val" id="d-ideas">0</div><div class="m-lbl">Content ideas</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">This week's priorities</div>
+        <div id="priority-list"></div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <input type="text" id="p-input" placeholder="Add a priority task..." onkeydown="if(event.key==='Enter')addPriority()" style="flex:1">
+          <button class="btn sm primary" onclick="addPriority()">Add</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Monthly revenue</div>
+        <div style="margin-bottom:14px">
+          <div class="rev-row">
+            <span class="rev-label">Goal</span>
+            <span class="rev-value" id="rv-goal-lbl">$2,000</span>
+          </div>
+          <div class="rev-row">
+            <span class="rev-label">Earned this month</span>
+            <span class="rev-value" style="color:var(--success)" id="rv-earned-lbl">$0</span>
+          </div>
+          <div class="prog-track"><div class="prog-fill" id="rv-bar" style="width:0%"></div></div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:5px" id="rv-pct">0% of goal</div>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label>Goal ($)</label><input type="number" id="rv-goal" value="2000" oninput="saveRevenue()"></div>
+          <div class="field"><label>Earned ($)</label><input type="number" id="rv-earned" value="0" oninput="saveRevenue()"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Hours this week</div>
+      <div class="grid4" style="margin-bottom:0">
+        <div class="metric" style="border:none;padding:12px 0">
+          <div class="m-val" id="wh-client" style="color:var(--accent)">0h</div>
+          <div class="m-lbl">Client work</div>
+        </div>
+        <div class="metric" style="border:none;padding:12px 0">
+          <div class="m-val" id="wh-outreach" style="color:var(--success)">0h</div>
+          <div class="m-lbl">Outreach</div>
+        </div>
+        <div class="metric" style="border:none;padding:12px 0">
+          <div class="m-val" id="wh-content" style="color:var(--pro)">0h</div>
+          <div class="m-lbl">Content</div>
+        </div>
+        <div class="metric" style="border:none;padding:12px 0">
+          <div class="m-val" id="wh-total">0h</div>
+          <div class="m-lbl">Total / 25h</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Recent clients</div>
+      <div id="dash-clients-recent"></div>
+    </div>
+  </div>
+
+  <!-- Projects -->
+  <div id="panel-projects" class="panel">
+    <div class="page-header">
+      <div class="page-title">Projects</div>
+      <div class="page-sub">Track every project, its status, and progress</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Add project</div>
+      <div class="form-grid">
+        <div class="field"><label>Project name *</label><input type="text" id="pj-name" placeholder="Clinic CRM setup"></div>
+        <div class="field"><label>Client</label><input type="text" id="pj-client" placeholder="Business or client name"></div>
+        <div class="field"><label>Status</label>
+          <select id="pj-status">
+            <option value="todo">To do</option>
+            <option value="progress">In progress</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div class="field"><label>Priority</label>
+          <select id="pj-priority">
+            <option value="high">High</option>
+            <option value="med">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div class="field"><label>Value ($)</label><input type="number" id="pj-value" placeholder="1200"></div>
+        <div class="field"><label>Deadline</label><input type="date" id="pj-deadline"></div>
+        <div class="field span2"><label>Notes / scope</label><textarea id="pj-notes" placeholder="Project scope, deliverables, client requirements..."></textarea></div>
+        <div class="field span2">
+          <label>Progress — <span id="pj-prog-val">0%</span></label>
+          <input type="range" min="0" max="100" step="5" value="0" id="pj-progress" oninput="document.getElementById('pj-prog-val').textContent=this.value+'%'">
+        </div>
+      </div>
+      <div class="err" id="pj-err"></div>
+      <div class="btn-row" style="margin-top:4px">
+        <button class="btn primary" onclick="addProject()">Save project</button>
+        <button class="btn ghost" onclick="clearProjectForm()">Clear</button>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterProjects('all',this)">All</button>
+      <button class="filter-btn" onclick="filterProjects('todo',this)">To do</button>
+      <button class="filter-btn" onclick="filterProjects('progress',this)">In progress</button>
+      <button class="filter-btn" onclick="filterProjects('done',this)">Done</button>
+      <button class="filter-btn" onclick="filterProjects('high',this)">High priority</button>
+    </div>
+    <div class="item-list" id="project-list"></div>
+  </div>
+
+  <!-- Clients -->
+  <div id="panel-clients" class="panel">
+    <div class="page-header">
+      <div class="page-title">Clients & pipeline</div>
+      <div class="page-sub">Track every lead, prospect, and active client</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Add client or lead</div>
+      <div class="form-grid">
+        <div class="field"><label>Name *</label><input type="text" id="cl-name" placeholder="Business or contact name"></div>
+        <div class="field"><label>Industry</label><input type="text" id="cl-industry" placeholder="Med spa, Dental, Real estate..."></div>
+        <div class="field"><label>Stage</label>
+          <select id="cl-stage">
+            <option value="lead">Lead</option>
+            <option value="prospect">Prospect</option>
+            <option value="active">Active client</option>
+            <option value="retainer">Retainer</option>
+            <option value="lost">Lost</option>
+          </select>
+        </div>
+        <div class="field"><label>Source</label>
+          <select id="cl-source">
+            <option value="fb">Facebook group</option>
+            <option value="ig">Instagram DM</option>
+            <option value="upwork">Upwork</option>
+            <option value="contra">Contra</option>
+            <option value="fiverr">Fiverr</option>
+            <option value="referral">Referral</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="field"><label>Deal value ($)</label><input type="number" id="cl-value" placeholder="1200"></div>
+        <div class="field"><label>Next step</label><input type="text" id="cl-next" placeholder="Follow up Friday, send proposal..."></div>
+        <div class="field"><label>Email / contact</label><input type="text" id="cl-contact" placeholder="email or @handle"></div>
+        <div class="field"><label>Follow-up date</label><input type="date" id="cl-followup"></div>
+        <div class="field span2"><label>Notes</label><textarea id="cl-notes" placeholder="Pain points, conversation notes, what they need..."></textarea></div>
+      </div>
+      <div class="err" id="cl-err"></div>
+      <div class="btn-row" style="margin-top:4px">
+        <button class="btn primary" onclick="addClient()">Add to pipeline</button>
+        <button class="btn ghost" onclick="clearClientForm()">Clear</button>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterClients('all',this)">All</button>
+      <button class="filter-btn" onclick="filterClients('lead',this)">Leads</button>
+      <button class="filter-btn" onclick="filterClients('prospect',this)">Prospects</button>
+      <button class="filter-btn" onclick="filterClients('active',this)">Active</button>
+      <button class="filter-btn" onclick="filterClients('retainer',this)">Retainers</button>
+      <button class="filter-btn" onclick="filterClients('lost',this)">Lost</button>
+    </div>
+    <div class="item-list" id="client-list"></div>
+  </div>
+
+  <!-- Content ideas -->
+  <div id="panel-content" class="panel">
+    <div class="page-header">
+      <div class="page-title">Content ideas</div>
+      <div class="page-sub">Capture ideas before they disappear. Batch-produce on weekends.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Capture idea</div>
+      <div class="form-grid">
+        <div class="field span2"><label>Idea / title *</label><input type="text" id="ci-title" placeholder="How I built a patient follow-up system for a dental clinic"></div>
+        <div class="field"><label>Platform</label>
+          <select id="ci-platform">
+            <option value="both">Instagram + TikTok</option>
+            <option value="ig">Instagram only</option>
+            <option value="tiktok">TikTok only</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="fb">Facebook</option>
+          </select>
+        </div>
+        <div class="field"><label>Format</label>
+          <select id="ci-format">
+            <option value="reel">Reel / short video</option>
+            <option value="carousel">Carousel</option>
+            <option value="post">Static post</option>
+            <option value="story">Story</option>
+          </select>
+        </div>
+        <div class="field"><label>Content type</label>
+          <select id="ci-type">
+            <option value="proof">Proof (show real work)</option>
+            <option value="problem">Problem → solution</option>
+            <option value="result">Client result</option>
+            <option value="insight">Industry insight</option>
+            <option value="process">Behind the scenes</option>
+          </select>
+        </div>
+        <div class="field"><label>Status</label>
+          <select id="ci-status">
+            <option value="idea">Idea</option>
+            <option value="scripted">Scripted</option>
+            <option value="recorded">Recorded</option>
+            <option value="published">Published</option>
+          </select>
+        </div>
+        <div class="field span2"><label>Hook / opening line</label><textarea id="ci-hook" placeholder="This clinic was managing patient follow-ups in a spreadsheet. Here's what I built..." style="min-height:56px"></textarea></div>
+        <div class="field span2"><label>Notes / talking points</label><textarea id="ci-notes" placeholder="Key points, visuals to capture, screen recordings needed..." style="min-height:56px"></textarea></div>
+      </div>
+      <div class="err" id="ci-err"></div>
+      <div class="btn-row" style="margin-top:4px">
+        <button class="btn primary" onclick="addIdea()">Save idea</button>
+        <button class="btn ghost" onclick="clearIdeaForm()">Clear</button>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterIdeas('all',this)">All</button>
+      <button class="filter-btn" onclick="filterIdeas('ig',this)">Instagram</button>
+      <button class="filter-btn" onclick="filterIdeas('tiktok',this)">TikTok</button>
+      <button class="filter-btn" onclick="filterIdeas('linkedin',this)">LinkedIn</button>
+      <button class="filter-btn" onclick="filterIdeas('proof',this)">Proof</button>
+      <button class="filter-btn" onclick="filterIdeas('result',this)">Results</button>
+    </div>
+    <div class="item-list" id="idea-list"></div>
+  </div>
+
+  <!-- Schedule -->
+  <div id="panel-schedule" class="panel">
+    <div class="page-header">
+      <div class="page-title">Weekly plan</div>
+      <div class="page-sub">Plan vs actual hours — white = planned, green-tinted = actual</div>
+    </div>
+
+    <div class="card">
+      <div style="overflow-x:auto">
+        <table class="sched-table" id="sched-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="min-width:120px">Activity</th>
+              <th colspan="2">Mon</th><th colspan="2">Tue</th><th colspan="2">Wed</th>
+              <th colspan="2">Thu</th><th colspan="2">Fri</th><th colspan="2">Sat</th>
+              <th colspan="2">Sun</th>
+              <th>Total</th>
+            </tr>
+            <tr>
+              <th class="row-label"></th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="sched-body"></tbody>
+          <tfoot id="sched-foot"></tfoot>
+        </table>
+      </div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:14px;font-size:12px;color:var(--text-2)">
+        <span>Planned: <strong id="s-planned" style="color:var(--text)">0h</strong></span>
+        <span>Actual: <strong id="s-actual" style="color:var(--success)">0h</strong></span>
+        <span>Budget: <strong style="color:var(--text)">25h</strong></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Evening routine</div>
+      <div class="routine-item"><span class="routine-time">7:30</span><span class="routine-text">Dinner and decompress — no laptop yet</span></div>
+      <div class="routine-item accent"><span class="routine-time">8:00</span><span class="routine-text">Outreach block — 30 min of focused DMs and Facebook group engagement. No multitasking.</span></div>
+      <div class="routine-item"><span class="routine-time">8:30</span><span class="routine-text">Client work or portfolio build — your deepest focus block of the evening</span></div>
+      <div class="routine-item pro"><span class="routine-time">10:30</span><span class="routine-text">Content batch — 2–3× per week only. Screen record, edit, schedule. Skip on heavy client nights.</span></div>
+      <div class="routine-item"><span class="routine-time">11:30</span><span class="routine-text">Stop. Sleep protects your day job performance — the income that funds this business.</span></div>
+    </div>
+  </div>
+
+  <!-- Folder structure -->
+  <div id="panel-folders" class="panel">
+    <div class="page-header">
+      <div class="page-title">Folder structure</div>
+      <div class="page-sub">Copy this to your computer. Click folders to expand or collapse.</div>
+    </div>
+    <div class="card">
+      <div class="tree" id="folder-tree"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Why this structure</div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;color:var(--text-2)">
+        <div><strong style="color:var(--text)">01-clients/</strong> — One subfolder per client keeps all files, contracts, invoices, and assets together. Never search for a client file again.</div>
+        <div><strong style="color:var(--text)">02-portfolio/</strong> — Live demos ready to show instantly. Case studies ready to post on Contra and LinkedIn. Screenshots for content creation.</div>
+        <div><strong style="color:var(--text)">03-products/</strong> — Where client patterns become reusable systems. Start filling this when you see the same problem across three clients.</div>
+        <div><strong style="color:var(--text)">04-content/</strong> — Batched by week. Raw recordings separate from edited exports. Never lose an asset or confuse a draft with a final.</div>
+        <div><strong style="color:var(--text)">05-business/</strong> — One proposal template you reuse forever. Contracts, invoices, and your finance tracker in one place.</div>
+        <div><strong style="color:var(--text)">06-learning/</strong> — Notes and code experiments that belong to no client project.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── State ──────────────────────────────────────────────────
+const DB = {
+  get(k){ try{ return JSON.parse(localStorage.getItem('ws_'+k)||'null') }catch(e){return null} },
+  set(k,v){ try{ localStorage.setItem('ws_'+k,JSON.stringify(v)) }catch(e){} }
+};
+
+let projects  = DB.get('projects')  || [];
+let clients   = DB.get('clients')   || [];
+let ideas     = DB.get('ideas')     || [];
+let priorities= DB.get('priorities')|| [];
+let schedule  = DB.get('schedule')  || {};
+const revenue = DB.get('revenue')   || {goal:2000,earned:0};
+
+const ACTIVITIES = [
+  { key:'client',    label:'Client work',     color:'var(--accent)' },
+  { key:'outreach',  label:'Outreach / sales',color:'var(--success)' },
+  { key:'content',   label:'Content creation',color:'var(--pro)' },
+  { key:'portfolio', label:'Portfolio / learning',color:'var(--warning)' }
+];
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+// initialise missing schedule keys
+ACTIVITIES.forEach(a=>{
+  if(!schedule[a.key]) schedule[a.key]={};
+  DAYS.forEach(d=>{ if(!schedule[a.key][d]) schedule[a.key][d]={p:'',a:''}; });
+});
+
+// ── Navigation ─────────────────────────────────────────────
+function nav(id, btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── Toast ──────────────────────────────────────────────────
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+// ── Dashboard ──────────────────────────────────────────────
+function updateDashboard(){
+  const now = new Date();
+  document.getElementById('dash-date').textContent =
+    now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  document.getElementById('d-projects').textContent = projects.filter(p=>p.status!='done').length;
+  document.getElementById('d-clients').textContent  = clients.length;
+  document.getElementById('d-revenue').textContent  = '$' + clients.reduce((s,c)=>s+(parseInt(c.value)||0),0).toLocaleString();
+  document.getElementById('d-ideas').textContent    = ideas.length;
+
+  document.getElementById('nav-projects').textContent = projects.filter(p=>p.status!='done').length;
+  document.getElementById('nav-clients').textContent  = clients.length;
+  document.getElementById('nav-content').textContent  = ideas.length;
+
+  renderPriorities();
+  updateRevenueDisplay();
+  updateWeeklyHours();
+  renderDashClients();
+}
+
+function renderDashClients(){
+  const el = document.getElementById('dash-clients-recent');
+  const recent = [...clients].slice(-4).reverse();
+  if(!recent.length){ el.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>No clients added yet.</div>'; return; }
+  el.innerHTML = recent.map(c=>`
+    <div class="item">
+      <div class="avatar">${c.name.charAt(0).toUpperCase()}</div>
+      <div class="item-main">
+        <div class="item-name">${c.name}${c.industry?' <span style="font-weight:400;color:var(--text-2)">· '+c.industry+'</span>':''}</div>
+        <div class="item-sub">${c.next||'No next step set'}</div>
+      </div>
+      <span class="badge ${c.stage}">${stageLabel(c.stage)}</span>
+    </div>`).join('');
+}
+
+// ── Revenue ────────────────────────────────────────────────
+function saveRevenue(){
+  revenue.goal   = parseInt(document.getElementById('rv-goal').value)||2000;
+  revenue.earned = parseInt(document.getElementById('rv-earned').value)||0;
+  DB.set('revenue', revenue);
+  updateRevenueDisplay();
+}
+function updateRevenueDisplay(){
+  const g=revenue.goal, e=revenue.earned;
+  const pct=Math.min(100, Math.round((e/g)*100));
+  document.getElementById('rv-goal').value = g;
+  document.getElementById('rv-earned').value = e;
+  document.getElementById('rv-goal-lbl').textContent  = '$'+g.toLocaleString();
+  document.getElementById('rv-earned-lbl').textContent= '$'+e.toLocaleString();
+  document.getElementById('rv-bar').style.width = pct+'%';
+  document.getElementById('rv-pct').textContent = pct+'% of goal';
+}
+
+// ── Priorities ─────────────────────────────────────────────
+function addPriority(){
+  const inp = document.getElementById('p-input');
+  const v = inp.value.trim();
+  if(!v) return;
+  priorities.push({ text:v, done:false });
+  DB.set('priorities', priorities);
+  inp.value='';
+  renderPriorities();
+}
+function togglePriority(i){ priorities[i].done = !priorities[i].done; DB.set('priorities',priorities); renderPriorities(); }
+function deletePriority(i){ priorities.splice(i,1); DB.set('priorities',priorities); renderPriorities(); }
+function renderPriorities(){
+  const el = document.getElementById('priority-list');
+  if(!priorities.length){
+    el.innerHTML='<div style="font-size:13px;color:var(--text-3);padding:4px 0">No priorities yet.</div>'; return;
+  }
+  el.innerHTML = priorities.map((p,i)=>`
+    <div class="priority-item ${p.done?'done':''}">
+      <input type="checkbox" ${p.done?'checked':''} onchange="togglePriority(${i})">
+      <span class="p-text">${p.text}</span>
+      <button class="btn ghost icon" onclick="deletePriority(${i})" style="padding:3px;color:var(--text-3)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`).join('');
+}
+
+// ── Projects ───────────────────────────────────────────────
+function addProject(){
+  const name = document.getElementById('pj-name').value.trim();
+  const err  = document.getElementById('pj-err');
+  if(!name){ err.textContent='Enter a project name.'; return; }
+  err.textContent='';
+  projects.push({
+    id: Date.now(),
+    name,
+    client:   document.getElementById('pj-client').value.trim(),
+    status:   document.getElementById('pj-status').value,
+    priority: document.getElementById('pj-priority').value,
+    value:    document.getElementById('pj-value').value,
+    deadline: document.getElementById('pj-deadline').value,
+    notes:    document.getElementById('pj-notes').value.trim(),
+    progress: parseInt(document.getElementById('pj-progress').value)
+  });
+  DB.set('projects', projects);
+  clearProjectForm();
+  renderProjects('all');
+  updateDashboard();
+  toast('Project saved.');
+}
+function deleteProject(id){ projects=projects.filter(p=>p.id!=id); DB.set('projects',projects); renderProjects(currentProjectFilter); updateDashboard(); }
+function clearProjectForm(){
+  ['pj-name','pj-client','pj-value','pj-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('pj-deadline').value='';
+  document.getElementById('pj-progress').value=0;
+  document.getElementById('pj-prog-val').textContent='0%';
+  document.getElementById('pj-status').value='todo';
+  document.getElementById('pj-priority').value='high';
+  document.getElementById('pj-err').textContent='';
+}
+let currentProjectFilter='all';
+function filterProjects(f,btn){
+  currentProjectFilter=f;
+  document.querySelectorAll('#panel-projects .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProjects(f);
+}
+function renderProjects(f){
+  const el = document.getElementById('project-list');
+  let list = f==='all' ? projects
+           : f==='high' ? projects.filter(p=>p.priority==='high')
+           : projects.filter(p=>p.status===f);
+  if(!list.length){ el.innerHTML=emptyState('No projects in this view.'); return; }
+  const statusLabel = {todo:'To do',progress:'In progress',done:'Done'};
+  el.innerHTML = list.map(p=>`
+    <div class="item column">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="item-main">
+          <div class="item-name">${p.name}</div>
+          <div class="item-sub">${[p.client,p.deadline?'Due '+fmtDate(p.deadline):'',p.value?'$'+parseInt(p.value).toLocaleString():''].filter(Boolean).join(' · ')}</div>
+        </div>
+        <span class="badge ${p.priority}">${p.priority}</span>
+        <span class="badge ${p.status}">${statusLabel[p.status]}</span>
+        <button class="btn danger sm" onclick="deleteProject(${p.id})">Delete</button>
+      </div>
+      <div class="prog-track"><div class="prog-fill ${p.status==='done'?'success':''}" style="width:${p.progress}%"></div></div>
+      <div style="font-size:11px;color:var(--text-3);margin-top:4px">${p.progress}% complete${p.notes?' · '+p.notes.substring(0,80)+(p.notes.length>80?'...':''):''}</div>
+    </div>`).join('');
+}
+
+// ── Clients ────────────────────────────────────────────────
+function addClient(){
+  const name = document.getElementById('cl-name').value.trim();
+  const err  = document.getElementById('cl-err');
+  if(!name){ err.textContent='Enter a client or business name.'; return; }
+  err.textContent='';
+  clients.push({
+    id:      Date.now(),
+    name,
+    industry: document.getElementById('cl-industry').value.trim(),
+    stage:    document.getElementById('cl-stage').value,
+    source:   document.getElementById('cl-source').value,
+    value:    document.getElementById('cl-value').value,
+    next:     document.getElementById('cl-next').value.trim(),
+    contact:  document.getElementById('cl-contact').value.trim(),
+    followup: document.getElementById('cl-followup').value,
+    notes:    document.getElementById('cl-notes').value.trim()
+  });
+  DB.set('clients', clients);
+  clearClientForm();
+  renderClients(currentClientFilter);
+  updateDashboard();
+  toast('Client added to pipeline.');
+}
+function deleteClient(id){ clients=clients.filter(c=>c.id!=id); DB.set('clients',clients); renderClients(currentClientFilter); updateDashboard(); }
+function clearClientForm(){
+  ['cl-name','cl-industry','cl-value','cl-next','cl-contact','cl-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cl-followup').value='';
+  document.getElementById('cl-stage').value='lead';
+  document.getElementById('cl-source').value='fb';
+  document.getElementById('cl-err').textContent='';
+}
+let currentClientFilter='all';
+function filterClients(f,btn){
+  currentClientFilter=f;
+  document.querySelectorAll('#panel-clients .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderClients(f);
+}
+const sourceLabel = {fb:'Facebook',ig:'Instagram',upwork:'Upwork',contra:'Contra',fiverr:'Fiverr',referral:'Referral',linkedin:'LinkedIn',other:'Other'};
+function stageLabel(s){ return {lead:'Lead',prospect:'Prospect',active:'Active',retainer:'Retainer',lost:'Lost'}[s]||s; }
+function renderClients(f){
+  const el = document.getElementById('client-list');
+  const list = f==='all' ? clients : clients.filter(c=>c.stage===f);
+  if(!list.length){ el.innerHTML=emptyState('No clients in this stage.'); return; }
+  el.innerHTML = list.map(c=>`
+    <div class="item">
+      <div class="avatar">${c.name.charAt(0).toUpperCase()}</div>
+      <div class="item-main">
+        <div class="item-name">${c.name}${c.industry?` <span style="font-weight:400;color:var(--text-2)">· ${c.industry}</span>`:''}</div>
+        <div class="item-sub">${[c.value?'$'+parseInt(c.value).toLocaleString():'', 'via '+sourceLabel[c.source], c.followup?'Follow-up: '+fmtDate(c.followup):''].filter(Boolean).join(' · ')}</div>
+        ${c.next?`<div class="item-sub" style="margin-top:3px;color:var(--accent)">→ ${c.next}</div>`:''}
+        ${c.notes?`<div class="item-sub" style="margin-top:3px">${c.notes.substring(0,100)}${c.notes.length>100?'...':''}</div>`:''}
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+        <span class="badge ${c.stage}">${stageLabel(c.stage)}</span>
+        <button class="btn danger sm" onclick="deleteClient(${c.id})">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── Ideas ──────────────────────────────────────────────────
+function addIdea(){
+  const title = document.getElementById('ci-title').value.trim();
+  const err   = document.getElementById('ci-err');
+  if(!title){ err.textContent='Enter an idea title.'; return; }
+  err.textContent='';
+  ideas.push({
+    id:       Date.now(),
+    title,
+    platform: document.getElementById('ci-platform').value,
+    format:   document.getElementById('ci-format').value,
+    type:     document.getElementById('ci-type').value,
+    status:   document.getElementById('ci-status').value,
+    hook:     document.getElementById('ci-hook').value.trim(),
+    notes:    document.getElementById('ci-notes').value.trim(),
+    date:     new Date().toISOString().slice(0,10)
+  });
+  DB.set('ideas', ideas);
+  clearIdeaForm();
+  renderIdeas(currentIdeaFilter);
+  updateDashboard();
+  toast('Idea saved.');
+}
+function deleteIdea(id){ ideas=ideas.filter(i=>i.id!=id); DB.set('ideas',ideas); renderIdeas(currentIdeaFilter); updateDashboard(); }
+function clearIdeaForm(){
+  ['ci-title','ci-hook','ci-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('ci-platform').value='both';
+  document.getElementById('ci-format').value='reel';
+  document.getElementById('ci-type').value='proof';
+  document.getElementById('ci-status').value='idea';
+  document.getElementById('ci-err').textContent='';
+}
+let currentIdeaFilter='all';
+function filterIdeas(f,btn){
+  currentIdeaFilter=f;
+  document.querySelectorAll('#panel-content .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderIdeas(f);
+}
+const platLabel = {both:'IG + TikTok',ig:'Instagram',tiktok:'TikTok',linkedin:'LinkedIn',fb:'Facebook'};
+const typeLabel  = {proof:'Proof',problem:'Problem → solution',result:'Client result',insight:'Industry insight',process:'Behind the scenes'};
+const fmtLabel   = {reel:'Reel',carousel:'Carousel',post:'Static post',story:'Story'};
+const ideaStatusLabel = {idea:'Idea',scripted:'Scripted',recorded:'Recorded',published:'Published'};
+function renderIdeas(f){
+  const el = document.getElementById('idea-list');
+  const list = f==='all' ? ideas
+             : ideas.filter(i=>i.platform===f||i.platform==='both'&&(f==='ig'||f==='tiktok')||i.type===f);
+  if(!list.length){ el.innerHTML=emptyState('No ideas in this view.'); return; }
+  el.innerHTML = list.map(d=>`
+    <div class="item column">
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <div class="item-main">
+          <div class="item-name">${d.title}</div>
+          <div class="item-sub">${fmtLabel[d.format]} · ${typeLabel[d.type]} · ${ideaStatusLabel[d.status]} · ${fmtDate(d.date)}</div>
+          ${d.hook?`<div class="item-sub" style="margin-top:5px;font-style:italic;color:var(--text)">"${d.hook.substring(0,120)}${d.hook.length>120?'...':''}"</div>`:''}
+          ${d.notes?`<div class="item-sub" style="margin-top:3px">${d.notes.substring(0,100)}${d.notes.length>100?'...':''}</div>`:''}
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+          <span class="badge ${d.platform}">${platLabel[d.platform]}</span>
+          <span class="badge ${d.type}">${typeLabel[d.type]}</span>
+          <button class="btn danger sm" onclick="deleteIdea(${d.id})">Delete</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── Schedule ───────────────────────────────────────────────
+function buildScheduleTable(){
+  const tbody = document.getElementById('sched-body');
+  const tfoot = document.getElementById('sched-foot');
+  tbody.innerHTML = ACTIVITIES.map(a=>`
+    <tr>
+      <td class="activity-name" style="color:${a.color}">${a.label}</td>
+      ${DAYS.map(d=>`
+        <td><input type="number" min="0" max="12" step="0.5" placeholder="—"
+          value="${schedule[a.key][d].p||''}"
+          oninput="updateSched('${a.key}','${d}','p',this.value)"></td>
+        <td><input type="number" min="0" max="12" step="0.5" placeholder="—" class="actual"
+          value="${schedule[a.key][d].a||''}"
+          oninput="updateSched('${a.key}','${d}','a',this.value)"></td>`).join('')}
+      <td class="row-total" id="rt-${a.key}">0h</td>
+    </tr>`).join('');
+  updateScheduleTotals();
+}
+function updateSched(key,day,type,val){
+  schedule[key][day][type]=val;
+  DB.set('schedule',schedule);
+  updateScheduleTotals();
+  updateWeeklyHours();
+}
+function updateScheduleTotals(){
+  let totalPl=0, totalAct=0;
+  ACTIVITIES.forEach(a=>{
+    let row=0;
+    DAYS.forEach(d=>{
+      row += parseFloat(schedule[a.key][d].a||schedule[a.key][d].p||0);
+      totalPl  += parseFloat(schedule[a.key][d].p||0);
+      totalAct += parseFloat(schedule[a.key][d].a||0);
+    });
+    const el=document.getElementById('rt-'+a.key);
+    if(el) el.textContent=Math.round(row*10)/10+'h';
+  });
+  document.getElementById('s-planned').textContent=Math.round(totalPl*10)/10+'h';
+  document.getElementById('s-actual').textContent=Math.round(totalAct*10)/10+'h';
+}
+function updateWeeklyHours(){
+  const sum=k=>DAYS.reduce((s,d)=>s+parseFloat(schedule[k][d].a||schedule[k][d].p||0),0);
+  const c=sum('client'), o=sum('outreach'), co=sum('content'), po=sum('portfolio');
+  document.getElementById('wh-client').textContent=Math.round(c*10)/10+'h';
+  document.getElementById('wh-outreach').textContent=Math.round(o*10)/10+'h';
+  document.getElementById('wh-content').textContent=Math.round(co*10)/10+'h';
+  document.getElementById('wh-total').textContent=Math.round((c+o+co+po)*10)/10+'h';
+}
+
+// ── Folder tree ────────────────────────────────────────────
+const FOLDERS = [
+  {n:'FreelanceBusiness/', c:[
+    {n:'01-clients/', c:[
+      {n:'[ClientName-2026]/', c:[
+        {n:'01-brief/'},{n:'02-deliverables/'},{n:'03-assets/'},{n:'04-invoices/'},{n:'05-comms/'}
+      ]},
+      {n:'_template-client-folder/'}
+    ]},
+    {n:'02-portfolio/', c:[
+      {n:'live-demos/'},{n:'case-studies/'},{n:'screenshots/'}
+    ]},
+    {n:'03-products/', c:[
+      {n:'healthcare-crm/'},{n:'reusable-components/'},{n:'ideas-and-research/'}
+    ]},
+    {n:'04-content/', c:[
+      {n:'week-01/', c:[{n:'raw-recordings/'},{n:'edited-exports/'},{n:'captions/'}]},
+      {n:'templates/'},{n:'brand-assets/'}
+    ]},
+    {n:'05-business/', c:[
+      {n:'contracts/'},{n:'invoices/'},
+      {n:'finance-tracker.xlsx'},{n:'proposal-template.docx'},{n:'client-onboarding.md'}
+    ]},
+    {n:'06-learning/', c:[{n:'notes/'},{n:'experiments/'}]}
+  ]}
+];
+const collapsed = new Set();
+function renderFolderNode(node, depth){
+  const isFile = !node.c || node.c.length===0 || node.n.includes('.');
+  const indent = depth*18;
+  if(isFile){
+    return `<div style="padding-left:${indent+18}px;color:var(--text-2);line-height:2">📄 ${node.n}</div>`;
+  }
+  const key = depth+':'+node.n;
+  const open = !collapsed.has(key);
+  return `<div>
+    <div onclick="toggleFolder('${key}')" style="padding-left:${indent}px;cursor:pointer;display:flex;align-items:center;gap:5px;line-height:2;color:var(--accent);user-select:none" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">
+      <span style="font-size:11px">${open?'▾':'▸'}</span>
+      <span>${open?'📂':'📁'} ${node.n}</span>
+    </div>
+    <div id="fc-${key.replace(/[^a-z0-9]/gi,'_')}" style="${open?'':'display:none'}">
+      ${(node.c||[]).map(child=>renderFolderNode(child,depth+1)).join('')}
+    </div>
+  </div>`;
+}
+function renderFolderTree(){
+  document.getElementById('folder-tree').innerHTML = FOLDERS.map(n=>renderFolderNode(n,0)).join('');
+}
+function toggleFolder(key){
+  if(collapsed.has(key)) collapsed.delete(key); else collapsed.add(key);
+  renderFolderTree();
+}
+
+// ── Helpers ────────────────────────────────────────────────
+function fmtDate(str){
+  if(!str) return '';
+  try{
+    const d=new Date(str+'T12:00:00');
+    return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  }catch(e){ return str; }
+}
+function emptyState(msg){
+  return `<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>${msg}</div>`;
+}
+
+// ── Export backup ──────────────────────────────────────────
+function exportData(){
+  const data = { projects, clients, ideas, priorities, schedule, revenue, exportedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'workspace-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  toast('Backup exported.');
+}
+
+// ── Init ───────────────────────────────────────────────────
+updateDashboard();
+renderProjects('all');
+renderClients('all');
+renderIdeas('all');
+buildScheduleTable();
+renderFolderTree();
+</script>
+</body>
+</html>
