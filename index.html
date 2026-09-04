@@ -3,1059 +3,1341 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>How to Host Your Workspace on GitHub Pages — Complete Guide</title>
+<title>My Business Workspace</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-  --bg: #0f1117;
-  --surface: #181c27;
-  --surface2: #1e2333;
-  --surface3: #252b3b;
-  --border: rgba(255,255,255,0.07);
-  --border-strong: rgba(255,255,255,0.13);
-  --text: #e8eaf0;
-  --text-2: #8b90a0;
-  --text-3: #555d72;
-  --accent: #4f7ef8;
-  --accent-bg: rgba(79,126,248,0.1);
-  --success: #34c77b;
-  --success-bg: rgba(52,199,123,0.1);
-  --warning: #f5a623;
-  --warning-bg: rgba(245,166,35,0.1);
-  --danger: #f04f59;
-  --danger-bg: rgba(240,79,89,0.1);
-  --pro: #a855f7;
-  --code-bg: #141820;
-  --radius: 8px;
-}
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface2: #1e2333;
+    --surface3: #252b3b;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.13);
+    --text: #e8eaf0;
+    --text-2: #8b90a0;
+    --text-3: #555d72;
+    --accent: #4f7ef8;
+    --accent-bg: rgba(79,126,248,0.12);
+    --accent-border: rgba(79,126,248,0.3);
+    --success: #34c77b;
+    --success-bg: rgba(52,199,123,0.1);
+    --warning: #f5a623;
+    --warning-bg: rgba(245,166,35,0.1);
+    --danger: #f04f59;
+    --danger-bg: rgba(240,79,89,0.1);
+    --pro: #a855f7;
+    --pro-bg: rgba(168,85,247,0.1);
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
 
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  font-size: 15px;
-  line-height: 1.75;
-}
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
 
-/* ── Layout ── */
-.layout { display: flex; min-height: 100vh; }
+  /* ── Layout ── */
+  .app { display: flex; min-height: 100vh; }
 
-.toc {
-  width: 260px;
-  flex-shrink: 0;
-  position: fixed;
-  top: 0; left: 0; bottom: 0;
-  overflow-y: auto;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  padding: 28px 0;
-}
-.toc-brand {
-  padding: 0 20px 20px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 16px;
-}
-.toc-brand .t1 { font-size: 13px; font-weight: 600; color: var(--text); }
-.toc-brand .t2 { font-size: 11px; color: var(--text-3); margin-top: 3px; }
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+    overflow-y: auto;
+  }
 
-.toc-section-label {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: var(--text-3);
-  padding: 0 20px;
-  margin: 16px 0 6px;
-}
-.toc a {
-  display: block;
-  padding: 6px 20px;
-  font-size: 13px;
-  color: var(--text-2);
-  text-decoration: none;
-  border-left: 2px solid transparent;
-  transition: color 0.15s, border-color 0.15s;
-  line-height: 1.4;
-}
-.toc a:hover { color: var(--text); border-left-color: var(--border-strong); }
-.toc a.active { color: var(--accent); border-left-color: var(--accent); }
-.toc a.sub { padding-left: 32px; font-size: 12px; }
+  .sidebar-logo {
+    padding: 20px 18px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-logo .logo-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+  .sidebar-logo .logo-sub {
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: 2px;
+  }
 
-.content {
-  margin-left: 260px;
-  flex: 1;
-  max-width: 820px;
-  padding: 48px 48px 80px;
-}
+  .nav { padding: 12px 10px; flex: 1; }
+  .nav-section { margin-bottom: 20px; }
+  .nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 0 8px;
+    margin-bottom: 6px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: var(--text-2);
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+    margin-bottom: 1px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+  }
+  .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { background: var(--accent-bg); color: var(--accent); }
+  .nav-item .badge-count {
+    margin-left: auto;
+    background: var(--surface3);
+    color: var(--text-2);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 20px;
+    min-width: 18px;
+    text-align: center;
+  }
+  .nav-item.active .badge-count { background: var(--accent-bg); color: var(--accent); }
 
-/* ── Typography ── */
-h1 {
-  font-size: 32px;
-  font-weight: 600;
-  letter-spacing: -0.8px;
-  color: var(--text);
-  line-height: 1.2;
-  margin-bottom: 12px;
-}
-.doc-meta {
-  font-size: 13px;
-  color: var(--text-3);
-  margin-bottom: 36px;
-  padding-bottom: 28px;
-  border-bottom: 1px solid var(--border);
-}
-.doc-meta span { margin-right: 16px; }
+  .sidebar-footer {
+    padding: 14px 18px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-3);
+  }
 
-h2 {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.4px;
-  color: var(--text);
-  margin: 52px 0 16px;
-  padding-top: 8px;
-  scroll-margin-top: 24px;
-}
-h2:first-of-type { margin-top: 0; }
+  .main {
+    margin-left: 220px;
+    flex: 1;
+    padding: 28px 32px;
+    max-width: 1100px;
+  }
 
-h3 {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
-  margin: 28px 0 10px;
-  scroll-margin-top: 24px;
-}
+  /* ── Panels ── */
+  .panel { display: none; }
+  .panel.active { display: block; }
 
-p { margin-bottom: 14px; color: var(--text-2); }
-p strong { color: var(--text); font-weight: 500; }
+  .page-header {
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.4px;
+  }
+  .page-sub { font-size: 13px; color: var(--text-2); margin-top: 4px; }
 
-ul, ol { margin: 0 0 16px 0; padding-left: 20px; color: var(--text-2); }
-li { margin-bottom: 6px; line-height: 1.65; }
-li strong { color: var(--text); font-weight: 500; }
+  /* ── Cards ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
 
-/* ── Code ── */
-code {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  background: var(--code-bg);
-  border: 1px solid var(--border-strong);
-  border-radius: 4px;
-  padding: 1px 6px;
-  color: #a5b4fc;
-}
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
 
-.code-block {
-  background: var(--code-bg);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius);
-  margin: 14px 0 20px;
-  overflow: hidden;
-}
-.code-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 14px;
-  border-bottom: 1px solid var(--border);
-  font-size: 11px;
-  color: var(--text-3);
-  font-family: 'JetBrains Mono', monospace;
-}
-.code-header .lang { color: var(--accent); font-weight: 500; }
-.copy-btn {
-  background: none;
-  border: 1px solid var(--border-strong);
-  border-radius: 4px;
-  padding: 3px 8px;
-  color: var(--text-3);
-  font-size: 11px;
-  cursor: pointer;
-  font-family: inherit;
-  transition: color 0.15s, border-color 0.15s;
-}
-.copy-btn:hover { color: var(--text); border-color: var(--border-strong); }
-pre {
-  padding: 16px;
-  overflow-x: auto;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  line-height: 1.65;
-  color: var(--text-2);
-  margin: 0;
-}
-pre .cm { color: var(--text-3); font-style: italic; }
-pre .kw { color: #a5b4fc; }
-pre .str { color: #86efac; }
-pre .fn { color: #67e8f9; }
-pre .num { color: var(--warning); }
-pre .punc { color: var(--text-3); }
+  /* ── Metric cards ── */
+  .metric {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+  }
+  .metric .m-val {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .metric .m-lbl { font-size: 12px; color: var(--text-2); }
+  .metric .m-change { font-size: 11px; margin-top: 4px; }
 
-/* ── Callouts ── */
-.callout {
-  border-radius: var(--radius);
-  padding: 14px 16px;
-  margin: 16px 0 20px;
-  font-size: 13px;
-  border-left: 3px solid;
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-.callout-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
-.callout-body { flex: 1; }
-.callout-body p { margin: 0; color: inherit; }
-.callout.info { background: var(--accent-bg); border-color: var(--accent); color: #a5b4fc; }
-.callout.success { background: var(--success-bg); border-color: var(--success); color: #86efac; }
-.callout.warning { background: var(--warning-bg); border-color: var(--warning); color: #fcd34d; }
-.callout.danger { background: var(--danger-bg); border-color: var(--danger); color: #fca5a5; }
+  /* ── Forms ── */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-grid.full { grid-template-columns: 1fr; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 12px; font-weight: 500; color: var(--text-2); }
+  .field.span2 { grid-column: 1 / -1; }
 
-/* ── Step cards ── */
-.step-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px 22px;
-  margin-bottom: 12px;
-  position: relative;
-}
-.step-card::before {
-  content: attr(data-step);
-  position: absolute;
-  top: -11px;
-  left: 18px;
-  background: var(--accent);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 10px;
-  border-radius: 20px;
-  letter-spacing: 0.3px;
-}
-.step-card h3 { margin: 4px 0 10px; font-size: 15px; }
-.step-card p, .step-card ul, .step-card ol { font-size: 13px; }
+  input[type=text], input[type=number], input[type=date], select, textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 8px 11px;
+    font-size: 13px;
+    color: var(--text);
+    font-family: inherit;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  textarea { resize: vertical; min-height: 72px; }
+  select option { background: var(--surface2); }
+  input::placeholder, textarea::placeholder { color: var(--text-3); }
 
-/* ── Tool cards ── */
-.tool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 24px; }
-.tool-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-}
-.tool-card .tool-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-.tool-card .tool-role { font-size: 12px; color: var(--accent); margin-bottom: 6px; font-weight: 500; }
-.tool-card .tool-desc { font-size: 12px; color: var(--text-2); line-height: 1.55; }
-.tool-card .tool-url { font-size: 11px; color: var(--text-3); margin-top: 8px; font-family: 'JetBrains Mono', monospace; }
+  input[type=range] {
+    accent-color: var(--accent);
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    width: 100%;
+  }
 
-/* ── Table ── */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-  margin: 14px 0 20px;
-}
-th {
-  text-align: left;
-  padding: 8px 12px;
-  font-weight: 500;
-  color: var(--text-2);
-  font-size: 12px;
-  border-bottom: 1px solid var(--border-strong);
-}
-td {
-  padding: 9px 12px;
-  color: var(--text-2);
-  border-bottom: 1px solid var(--border);
-  vertical-align: top;
-}
-td strong { color: var(--text); }
-tr:last-child td { border-bottom: none; }
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-strong);
+    background: var(--surface2);
+    color: var(--text);
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .btn:hover { background: var(--surface3); }
+  .btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .btn.primary:hover { opacity: 0.88; }
+  .btn.ghost { background: none; border-color: transparent; color: var(--text-2); }
+  .btn.ghost:hover { background: var(--surface2); color: var(--text); }
+  .btn.danger { color: var(--danger); border-color: transparent; background: none; }
+  .btn.danger:hover { background: var(--danger-bg); }
+  .btn.sm { padding: 5px 10px; font-size: 12px; }
+  .btn.icon { padding: 6px; }
 
-/* ── Progress indicator ── */
-.phase-bar {
-  display: flex;
-  gap: 0;
-  margin: 20px 0 32px;
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1px solid var(--border);
-}
-.phase {
-  flex: 1;
-  padding: 10px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  text-align: center;
-  background: var(--surface);
-  color: var(--text-3);
-  border-right: 1px solid var(--border);
-  line-height: 1.3;
-}
-.phase:last-child { border-right: none; }
-.phase.active { background: var(--accent-bg); color: var(--accent); }
-.phase .ph-num { font-size: 10px; display: block; margin-bottom: 2px; opacity: 0.6; }
+  .btn-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
-/* ── Divider ── */
-.divider { height: 1px; background: var(--border); margin: 40px 0; }
+  /* ── Error ── */
+  .err { font-size: 12px; color: var(--danger); margin-top: 6px; min-height: 16px; }
 
-/* ── Checklist ── */
-.checklist { list-style: none; padding: 0; margin: 12px 0 20px; }
-.checklist li {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  padding: 7px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text-2);
-}
-.checklist li:last-child { border-bottom: none; }
-.checklist .check {
-  width: 18px;
-  height: 18px;
-  border: 1px solid var(--border-strong);
-  border-radius: 4px;
-  flex-shrink: 0;
-  margin-top: 1px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 11px;
-  transition: background 0.15s;
-}
-.checklist .check.done { background: var(--success); border-color: var(--success); color: #0f1117; }
+  /* ── Items / list rows ── */
+  .item-list { display: flex; flex-direction: column; gap: 6px; }
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.15s;
+  }
+  .item:hover { border-color: var(--border-strong); }
+  .item.column { flex-direction: column; align-items: stretch; }
+  .item-main { flex: 1; min-width: 0; }
+  .item-name { font-size: 13px; font-weight: 500; color: var(--text); }
+  .item-sub { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+  .item-actions { display: flex; gap: 4px; flex-shrink: 0; }
 
-/* ── Badge ── */
-.badge {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 500;
-}
-.badge.free { background: var(--success-bg); color: var(--success); }
-.badge.required { background: var(--danger-bg); color: var(--danger); }
-.badge.optional { background: var(--surface2); color: var(--text-2); }
-.badge.windows { background: var(--accent-bg); color: var(--accent); }
-.badge.mac { background: var(--pro-bg); color: var(--pro); }
+  /* ── Badges ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .badge.todo { background: var(--surface3); color: var(--text-2); }
+  .badge.progress { background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-border); }
+  .badge.done { background: var(--success-bg); color: var(--success); }
+  .badge.lead { background: var(--warning-bg); color: var(--warning); }
+  .badge.prospect { background: var(--accent-bg); color: var(--accent); }
+  .badge.active { background: var(--success-bg); color: var(--success); }
+  .badge.retainer { background: var(--pro-bg); color: var(--pro); }
+  .badge.lost { background: var(--danger-bg); color: var(--danger); }
+  .badge.high { background: var(--danger-bg); color: var(--danger); }
+  .badge.med { background: var(--warning-bg); color: var(--warning); }
+  .badge.low { background: var(--success-bg); color: var(--success); }
+  .badge.ig { background: rgba(225,48,108,0.12); color: #e1306c; }
+  .badge.tiktok { background: rgba(0,242,234,0.1); color: #00f2ea; }
+  .badge.linkedin { background: var(--accent-bg); color: var(--accent); }
+  .badge.both { background: var(--pro-bg); color: var(--pro); }
+  .badge.fb { background: rgba(66,103,178,0.15); color: #6891d8; }
+  .badge.proof { background: var(--success-bg); color: var(--success); }
+  .badge.problem { background: var(--warning-bg); color: var(--warning); }
+  .badge.result { background: var(--pro-bg); color: var(--pro); }
+  .badge.insight { background: var(--accent-bg); color: var(--accent); }
+  .badge.process { background: rgba(20,184,166,0.12); color: #14b8a6; }
 
-/* ── Footer ── */
-.doc-footer {
-  margin-top: 60px;
-  padding-top: 24px;
-  border-top: 1px solid var(--border);
-  font-size: 12px;
-  color: var(--text-3);
-}
+  /* ── Progress bar ── */
+  .prog-track {
+    width: 100%;
+    height: 4px;
+    background: var(--surface3);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .prog-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+  .prog-fill.success { background: var(--success); }
 
-/* ── Scrollbar ── */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+  /* ── Empty state ── */
+  .empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-3);
+    font-size: 13px;
+  }
+  .empty svg { width: 32px; height: 32px; margin-bottom: 10px; opacity: 0.4; display: block; margin-inline: auto; }
 
-@media (max-width: 900px) {
-  .toc { display: none; }
-  .content { margin-left: 0; padding: 24px 20px 60px; }
-  .tool-grid { grid-template-columns: 1fr; }
-  h1 { font-size: 24px; }
-}
+  /* ── Divider ── */
+  .divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+  /* ── Filter bar ── */
+  .filter-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .filter-btn {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid var(--border-strong);
+    background: none;
+    color: var(--text-2);
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.12s, color 0.12s;
+  }
+  .filter-btn:hover { background: var(--surface2); color: var(--text); }
+  .filter-btn.active { background: var(--accent-bg); color: var(--accent); border-color: var(--accent-border); }
+
+  /* ── Schedule table ── */
+  .sched-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .sched-table th {
+    text-align: center;
+    padding: 6px 4px;
+    font-weight: 500;
+    color: var(--text-2);
+    font-size: 11px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sched-table th.row-label { text-align: left; }
+  .sched-table td { padding: 4px; }
+  .sched-table td.activity-name {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 8px;
+    white-space: nowrap;
+    color: var(--text-2);
+  }
+  .sched-table td.row-total {
+    text-align: center;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 6px 8px;
+    color: var(--text);
+  }
+  .sched-table input[type=number] {
+    padding: 5px 4px;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 6px;
+    min-width: 0;
+    width: 100%;
+  }
+  .sched-table input.actual { background: rgba(52,199,123,0.06); border-color: rgba(52,199,123,0.2); }
+  .sched-table tfoot td {
+    padding: 8px 4px;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+  }
+  .sched-table tfoot td.lbl { text-align: left; padding-left: 8px; color: var(--text-2); }
+
+  /* ── Revenue progress ── */
+  .rev-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .rev-label { font-size: 12px; color: var(--text-2); }
+  .rev-value { font-size: 13px; font-weight: 500; }
+
+  /* ── Priority checklist ── */
+  .priority-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--radius);
+    background: var(--surface2);
+    margin-bottom: 6px;
+  }
+  .priority-item input[type=checkbox] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+    border: none;
+    background: none;
+  }
+  .priority-item .p-text {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text);
+    word-break: break-word;
+  }
+  .priority-item.done .p-text { text-decoration: line-through; color: var(--text-3); }
+
+  /* ── Folder tree ── */
+  .tree { font-family: 'Courier New', monospace; font-size: 13px; line-height: 1.8; }
+  .tree-item { cursor: default; }
+  .tree-dir { cursor: pointer; color: var(--accent); display: flex; align-items: center; gap: 4px; }
+  .tree-dir:hover { opacity: 0.8; }
+  .tree-file { color: var(--text-2); padding-left: 18px; }
+  .tree-children { padding-left: 20px; overflow: hidden; }
+
+  /* ── Routine blocks ── */
+  .routine-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 10px 14px;
+    border-radius: var(--radius);
+    margin-bottom: 6px;
+    background: var(--surface2);
+  }
+  .routine-time { font-size: 12px; font-weight: 600; color: var(--text-3); min-width: 38px; padding-top: 1px; }
+  .routine-text { font-size: 13px; color: var(--text); flex: 1; }
+  .routine-item.accent { background: var(--accent-bg); }
+  .routine-item.accent .routine-time { color: var(--accent); }
+  .routine-item.pro { background: var(--pro-bg); }
+  .routine-item.pro .routine-time { color: var(--pro); }
+
+  /* ── Avatar ── */
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface3);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 10px 16px;
+    font-size: 13px;
+    color: var(--text);
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    .sidebar { width: 100%; height: auto; position: relative; flex-direction: row; overflow-x: auto; }
+    .app { flex-direction: column; }
+    .main { margin-left: 0; padding: 16px; }
+    .nav { display: flex; padding: 8px; }
+    .nav-section { margin: 0; display: flex; gap: 4px; }
+    .nav-label { display: none; }
+    .sidebar-logo { display: none; }
+    .grid4 { grid-template-columns: 1fr 1fr; }
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .sched-table { font-size: 11px; }
+  }
 </style>
 </head>
 <body>
-<div class="layout">
+<div class="app">
 
-<!-- Table of contents -->
-<nav class="toc" aria-label="Table of contents">
-  <div class="toc-brand">
-    <div class="t1">Workspace deployment guide</div>
-    <div class="t2">GitHub Pages · Zero cost</div>
+<!-- ── Sidebar ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-name">My Workspace</div>
+    <div class="logo-sub">Freelance business OS</div>
   </div>
-  <div class="toc-section-label">Overview</div>
-  <a href="#overview">What you are building</a>
-  <a href="#tools">Tools you need</a>
-
-  <div class="toc-section-label">Phase 1 — Setup</div>
-  <a href="#install-git">Install Git</a>
-  <a href="#install-vscode">Install VS Code</a>
-  <a href="#github-account">Create GitHub account</a>
-
-  <div class="toc-section-label">Phase 2 — Project</div>
-  <a href="#folder-setup">Set up project folder</a>
-  <a href="#save-file">Save your HTML file</a>
-  <a href="#open-vscode">Open in VS Code</a>
-  <a href="#test-local">Test locally</a>
-
-  <div class="toc-section-label">Phase 3 — GitHub</div>
-  <a href="#create-repo">Create repository</a>
-  <a href="#connect-git">Connect Git to repo</a>
-  <a href="#push-code">Push code to GitHub</a>
-
-  <div class="toc-section-label">Phase 4 — Deploy</div>
-  <a href="#enable-pages">Enable GitHub Pages</a>
-  <a href="#verify-live">Verify it is live</a>
-  <a href="#custom-domain">Custom domain (optional)</a>
-
-  <div class="toc-section-label">Maintenance</div>
-  <a href="#update-workflow">How to update</a>
-  <a href="#backup">Backup your data</a>
-  <a href="#troubleshooting">Troubleshooting</a>
-</nav>
-
-<!-- Main content -->
-<main class="content">
-
-  <h1>How to host your business workspace on GitHub Pages</h1>
-  <div class="doc-meta">
-    <span>Complete guide</span>
-    <span>·</span>
-    <span>Zero cost</span>
-    <span>·</span>
-    <span>Estimated time: 45–60 minutes</span>
-    <span>·</span>
-    <span>No prior experience required</span>
-  </div>
-
-  <!-- Overview -->
-  <h2 id="overview">What you are building</h2>
-
-  <p>You are taking the single <code>workspace.html</code> file and hosting it as a real website on GitHub Pages — a free hosting service that GitHub provides to every account. The result is a personal URL you can open from any browser, on any device, at any time.</p>
-
-  <div class="phase-bar">
-    <div class="phase active"><span class="ph-num">Phase 1</span>Install tools</div>
-    <div class="phase active"><span class="ph-num">Phase 2</span>Set up project</div>
-    <div class="phase active"><span class="ph-num">Phase 3</span>Push to GitHub</div>
-    <div class="phase active"><span class="ph-num">Phase 4</span>Go live</div>
-  </div>
-
-  <p>When you finish this guide you will have:</p>
-  <ul>
-    <li>A live URL like <code>yourname.github.io/workspace</code> that you can bookmark</li>
-    <li>Your workspace accessible from your phone, your work computer, or any browser</li>
-    <li>A simple update workflow — edit the file, run two commands, changes go live in under a minute</li>
-    <li>Full version history of every change you ever make</li>
-    <li>Zero ongoing cost — GitHub Pages is permanently free for public repositories</li>
-  </ul>
-
-  <div class="callout info">
-    <span class="callout-icon">ℹ</span>
-    <div class="callout-body"><p><strong>Your data stays in your browser.</strong> The HTML file is just the interface — the app's code and structure. Your actual data (projects, clients, ideas) is stored in your browser's local storage on each device you use it from. The guide includes a section on backing up that data.</p></div>
-  </div>
-
-  <!-- Tools -->
-  <h2 id="tools">Tools you need</h2>
-  <p>Three tools. All free. All industry-standard. These are tools you will use throughout your development career — installing them now is not just for this project.</p>
-
-  <div class="tool-grid">
-    <div class="tool-card">
-      <div class="tool-name">Git <span class="badge free">Free</span> <span class="badge required">Required</span></div>
-      <div class="tool-role">Version control system</div>
-      <div class="tool-desc">Tracks every change you make to your code. Lets you push your files to GitHub. The backbone of all professional software development.</div>
-      <div class="tool-url">git-scm.com</div>
+  <nav class="nav">
+    <div class="nav-section">
+      <div class="nav-label">Overview</div>
+      <button class="nav-item active" onclick="nav('dashboard',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
     </div>
-    <div class="tool-card">
-      <div class="tool-name">VS Code <span class="badge free">Free</span> <span class="badge required">Required</span></div>
-      <div class="tool-role">Code editor</div>
-      <div class="tool-desc">Where you will open, edit, and manage your workspace file. The most widely used code editor in the world. Built by Microsoft.</div>
-      <div class="tool-url">code.visualstudio.com</div>
+    <div class="nav-section">
+      <div class="nav-label">Work</div>
+      <button class="nav-item" onclick="nav('projects',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Projects
+        <span class="badge-count" id="nav-projects">0</span>
+      </button>
+      <button class="nav-item" onclick="nav('clients',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Clients
+        <span class="badge-count" id="nav-clients">0</span>
+      </button>
+      <button class="nav-item" onclick="nav('content',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        Content ideas
+        <span class="badge-count" id="nav-content">0</span>
+      </button>
     </div>
-    <div class="tool-card">
-      <div class="tool-name">GitHub account <span class="badge free">Free</span> <span class="badge required">Required</span></div>
-      <div class="tool-role">Hosting platform</div>
-      <div class="tool-desc">Where your code lives and where GitHub Pages hosts your website. A GitHub profile is also a professional portfolio for developers.</div>
-      <div class="tool-url">github.com</div>
+    <div class="nav-section">
+      <div class="nav-label">Planning</div>
+      <button class="nav-item" onclick="nav('schedule',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Weekly plan
+      </button>
+      <button class="nav-item" onclick="nav('folders',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+        Folder structure
+      </button>
     </div>
-    <div class="tool-card">
-      <div class="tool-name">Live Server (VS Code extension) <span class="badge free">Free</span> <span class="badge optional">Optional</span></div>
-      <div class="tool-role">Local preview</div>
-      <div class="tool-desc">Lets you preview your workspace in the browser while you edit it, with automatic refresh when you save. Makes editing much faster.</div>
-      <div class="tool-url">VS Code Extensions marketplace</div>
+  </nav>
+  <div class="sidebar-footer">
+    Data saved in your browser.<br>
+    <button class="btn ghost sm" onclick="exportData()" style="margin-top:8px;padding:4px 0">Export backup →</button>
+  </div>
+</aside>
+
+<!-- ── Main ── -->
+<main class="main">
+
+  <!-- Dashboard -->
+  <div id="panel-dashboard" class="panel active">
+    <div class="page-header">
+      <div class="page-title">Dashboard</div>
+      <div class="page-sub" id="dash-date">—</div>
     </div>
-  </div>
 
-  <div class="callout warning">
-    <span class="callout-icon">⚠</span>
-    <div class="callout-body"><p><strong>Windows or Mac?</strong> This guide covers both. Steps that differ by operating system are marked with <span class="badge windows">Windows</span> and <span class="badge mac">Mac</span> labels. Most steps are identical.</p></div>
-  </div>
+    <div class="grid4">
+      <div class="metric"><div class="m-val" id="d-projects">0</div><div class="m-lbl">Active projects</div></div>
+      <div class="metric"><div class="m-val" id="d-clients">0</div><div class="m-lbl">Clients & leads</div></div>
+      <div class="metric"><div class="m-val" id="d-revenue">$0</div><div class="m-lbl">Pipeline value</div></div>
+      <div class="metric"><div class="m-val" id="d-ideas">0</div><div class="m-lbl">Content ideas</div></div>
+    </div>
 
-  <div class="divider"></div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">This week's priorities</div>
+        <div id="priority-list"></div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <input type="text" id="p-input" placeholder="Add a priority task..." onkeydown="if(event.key==='Enter')addPriority()" style="flex:1">
+          <button class="btn sm primary" onclick="addPriority()">Add</button>
+        </div>
+      </div>
 
-  <!-- Phase 1 -->
-  <h2>Phase 1 — Install your tools</h2>
+      <div class="card">
+        <div class="card-title">Monthly revenue</div>
+        <div style="margin-bottom:14px">
+          <div class="rev-row">
+            <span class="rev-label">Goal</span>
+            <span class="rev-value" id="rv-goal-lbl">$2,000</span>
+          </div>
+          <div class="rev-row">
+            <span class="rev-label">Earned this month</span>
+            <span class="rev-value" style="color:var(--success)" id="rv-earned-lbl">$0</span>
+          </div>
+          <div class="prog-track"><div class="prog-fill" id="rv-bar" style="width:0%"></div></div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:5px" id="rv-pct">0% of goal</div>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label>Goal ($)</label><input type="number" id="rv-goal" value="2000" oninput="saveRevenue()"></div>
+          <div class="field"><label>Earned ($)</label><input type="number" id="rv-earned" value="0" oninput="saveRevenue()"></div>
+        </div>
+      </div>
+    </div>
 
-  <h2 id="install-git">Step 1: Install Git</h2>
-  <p>Git is how your local files connect to GitHub. It is a command-line tool, meaning you interact with it by typing short commands into a terminal window. You will learn exactly four Git commands to manage this project.</p>
+    <div class="card">
+      <div class="card-title">Hours this week</div>
+      <div class="grid4" style="margin-bottom:0">
+        <div class="metric" style="border:none;padding:12px 0">
+          <div class="m-val" id="wh-client" style="color:var(--accent)">0h</div>
+          <div class="m-lbl">Client work</div>
+        </div>
+        <div class="metric" style="border:none;padding:12px 0">
+          <div class="m-val" id="wh-outreach" style="color:var(--success)">0h</div>
+          <div class="m-lbl">Outreach</div>
+        </div>
+        <div class="metric" style="border:none;padding:12px 0">
+          <div class="m-val" id="wh-content" style="color:var(--pro)">0h</div>
+          <div class="m-lbl">Content</div>
+        </div>
+        <div class="metric" style="border:none;padding:12px 0">
+          <div class="m-val" id="wh-total">0h</div>
+          <div class="m-lbl">Total / 25h</div>
+        </div>
+      </div>
+    </div>
 
-  <div class="step-card" data-step="Step 1.1">
-    <h3>Download Git</h3>
-    <p>Go to <strong>git-scm.com/downloads</strong> and click the download button for your operating system. The site detects your OS automatically.</p>
-    <ul>
-      <li><strong>Windows:</strong> download the <code>.exe</code> installer</li>
-      <li><strong>Mac:</strong> the recommended method is installing via Homebrew (explained below), but there is also a direct download if you prefer</li>
-    </ul>
-  </div>
-
-  <div class="step-card" data-step="Step 1.2 — Windows">
-    <h3>Install Git on Windows</h3>
-    <p>Run the downloaded <code>.exe</code> file. The installer has many screens — use these settings:</p>
-    <ul>
-      <li>When asked about the default editor, select <strong>Visual Studio Code</strong> from the dropdown (you will install this next)</li>
-      <li>When asked about PATH environment, select <strong>"Git from the command line and also from 3rd-party software"</strong></li>
-      <li>Leave all other settings at their defaults and click Next through the rest</li>
-    </ul>
-    <p>After installation, open the <strong>Start menu</strong>, search for <strong>Git Bash</strong>, and open it. You should see a terminal window with a prompt. Type the command below and press Enter — if it prints a version number, Git is installed correctly.</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Git Bash (Windows)</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre>git --version</pre>
+    <div class="card">
+      <div class="card-title">Recent clients</div>
+      <div id="dash-clients-recent"></div>
     </div>
   </div>
 
-  <div class="step-card" data-step="Step 1.2 — Mac">
-    <h3>Install Git on Mac</h3>
-    <p>Open the <strong>Terminal</strong> app. You can find it by pressing <code>Command + Space</code> and typing "Terminal". Then run:</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal (Mac)</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre>xcode-select --install</pre>
+  <!-- Projects -->
+  <div id="panel-projects" class="panel">
+    <div class="page-header">
+      <div class="page-title">Projects</div>
+      <div class="page-sub">Track every project, its status, and progress</div>
     </div>
-    <p>A dialog will appear asking you to install the Command Line Developer Tools. Click <strong>Install</strong>. This takes a few minutes. Git is included in this package. After it finishes, verify with:</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal (Mac)</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre>git --version</pre>
+
+    <div class="card">
+      <div class="card-title">Add project</div>
+      <div class="form-grid">
+        <div class="field"><label>Project name *</label><input type="text" id="pj-name" placeholder="Clinic CRM setup"></div>
+        <div class="field"><label>Client</label><input type="text" id="pj-client" placeholder="Business or client name"></div>
+        <div class="field"><label>Status</label>
+          <select id="pj-status">
+            <option value="todo">To do</option>
+            <option value="progress">In progress</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div class="field"><label>Priority</label>
+          <select id="pj-priority">
+            <option value="high">High</option>
+            <option value="med">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div class="field"><label>Value ($)</label><input type="number" id="pj-value" placeholder="1200"></div>
+        <div class="field"><label>Deadline</label><input type="date" id="pj-deadline"></div>
+        <div class="field span2"><label>Notes / scope</label><textarea id="pj-notes" placeholder="Project scope, deliverables, client requirements..."></textarea></div>
+        <div class="field span2">
+          <label>Progress — <span id="pj-prog-val">0%</span></label>
+          <input type="range" min="0" max="100" step="5" value="0" id="pj-progress" oninput="document.getElementById('pj-prog-val').textContent=this.value+'%'">
+        </div>
+      </div>
+      <div class="err" id="pj-err"></div>
+      <div class="btn-row" style="margin-top:4px">
+        <button class="btn primary" onclick="addProject()">Save project</button>
+        <button class="btn ghost" onclick="clearProjectForm()">Clear</button>
+      </div>
     </div>
-    <p>You should see something like <code>git version 2.39.0</code>. The exact number does not matter.</p>
-  </div>
 
-  <div class="step-card" data-step="Step 1.3">
-    <h3>Configure Git with your name and email</h3>
-    <p>Git needs to know who you are so it can label your commits (saved changes). Run these two commands, replacing the example name and email with your own. Use the same email you will use for your GitHub account.</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal / Git Bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre>git config --global user.name <span class="str">"Your Name"</span>
-git config --global user.email <span class="str">"you@email.com"</span></pre>
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterProjects('all',this)">All</button>
+      <button class="filter-btn" onclick="filterProjects('todo',this)">To do</button>
+      <button class="filter-btn" onclick="filterProjects('progress',this)">In progress</button>
+      <button class="filter-btn" onclick="filterProjects('done',this)">Done</button>
+      <button class="filter-btn" onclick="filterProjects('high',this)">High priority</button>
     </div>
-    <p>These commands produce no output when they succeed. That is normal — silence means it worked.</p>
+    <div class="item-list" id="project-list"></div>
   </div>
 
-  <!-- VS Code -->
-  <h2 id="install-vscode">Step 2: Install VS Code</h2>
-
-  <div class="step-card" data-step="Step 2.1">
-    <h3>Download and install VS Code</h3>
-    <p>Go to <strong>code.visualstudio.com</strong> and click the large download button. The site detects your operating system automatically.</p>
-    <ul>
-      <li><strong>Windows:</strong> run the <code>.exe</code> installer. On the "Select Additional Tasks" screen, check <strong>"Add to PATH"</strong> and <strong>"Open with Code" context menu options</strong>. These make VS Code much easier to use from the terminal.</li>
-      <li><strong>Mac:</strong> open the <code>.dmg</code> file, drag VS Code to your Applications folder. Then open VS Code, press <code>Command + Shift + P</code>, type "shell command", and select <strong>"Shell Command: Install 'code' command in PATH"</strong>. This lets you open VS Code from the terminal.</li>
-    </ul>
-  </div>
-
-  <div class="step-card" data-step="Step 2.2">
-    <h3>Install the Live Server extension</h3>
-    <p>This extension lets you preview your HTML file in a browser that automatically refreshes when you save changes. It is the fastest way to test edits.</p>
-    <ul>
-      <li>Open VS Code</li>
-      <li>Click the <strong>Extensions icon</strong> in the left sidebar (it looks like four squares)</li>
-      <li>In the search box, type <strong>Live Server</strong></li>
-      <li>The top result should be by <strong>Ritwick Dey</strong> with over 30 million downloads</li>
-      <li>Click <strong>Install</strong></li>
-    </ul>
-    <p>After installing, you will see a "Go Live" button in the bottom-right corner of VS Code whenever you have an HTML file open.</p>
-  </div>
-
-  <!-- GitHub account -->
-  <h2 id="github-account">Step 3: Create your GitHub account</h2>
-
-  <div class="step-card" data-step="Step 3.1">
-    <h3>Sign up at github.com</h3>
-    <p>Go to <strong>github.com</strong> and click <strong>Sign up</strong>. Choose your username carefully — it will appear in your website URL. Use something professional since this profile will serve as part of your developer portfolio.</p>
-    <ul>
-      <li>Recommended username format: <code>firstname-lastname</code> or <code>firstnamelastname</code></li>
-      <li>Avoid numbers, underscores, or words unrelated to your professional identity</li>
-      <li>Your workspace URL will be: <code>yourusername.github.io/workspace</code></li>
-    </ul>
-    <p>Choose the <strong>Free plan</strong> — it includes unlimited public repositories and GitHub Pages hosting.</p>
-  </div>
-
-  <div class="step-card" data-step="Step 3.2">
-    <h3>Set up SSH authentication (recommended)</h3>
-    <p>SSH is a secure way for Git to communicate with GitHub without typing your password every time. This is the professional standard and worth setting up once.</p>
-    <p>In your terminal, run:</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal / Git Bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre>ssh-keygen -t ed25519 -C <span class="str">"you@email.com"</span></pre>
+  <!-- Clients -->
+  <div id="panel-clients" class="panel">
+    <div class="page-header">
+      <div class="page-title">Clients & pipeline</div>
+      <div class="page-sub">Track every lead, prospect, and active client</div>
     </div>
-    <p>Press Enter three times to accept all defaults (no passphrase is fine for a personal machine). Then run:</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal / Git Bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre><span class="cm"># Mac</span>
-cat ~/.ssh/id_ed25519.pub
 
-<span class="cm"># Windows (Git Bash)</span>
-cat ~/.ssh/id_ed25519.pub</pre>
+    <div class="card">
+      <div class="card-title">Add client or lead</div>
+      <div class="form-grid">
+        <div class="field"><label>Name *</label><input type="text" id="cl-name" placeholder="Business or contact name"></div>
+        <div class="field"><label>Industry</label><input type="text" id="cl-industry" placeholder="Med spa, Dental, Real estate..."></div>
+        <div class="field"><label>Stage</label>
+          <select id="cl-stage">
+            <option value="lead">Lead</option>
+            <option value="prospect">Prospect</option>
+            <option value="active">Active client</option>
+            <option value="retainer">Retainer</option>
+            <option value="lost">Lost</option>
+          </select>
+        </div>
+        <div class="field"><label>Source</label>
+          <select id="cl-source">
+            <option value="fb">Facebook group</option>
+            <option value="ig">Instagram DM</option>
+            <option value="upwork">Upwork</option>
+            <option value="contra">Contra</option>
+            <option value="fiverr">Fiverr</option>
+            <option value="referral">Referral</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="field"><label>Deal value ($)</label><input type="number" id="cl-value" placeholder="1200"></div>
+        <div class="field"><label>Next step</label><input type="text" id="cl-next" placeholder="Follow up Friday, send proposal..."></div>
+        <div class="field"><label>Email / contact</label><input type="text" id="cl-contact" placeholder="email or @handle"></div>
+        <div class="field"><label>Follow-up date</label><input type="date" id="cl-followup"></div>
+        <div class="field span2"><label>Notes</label><textarea id="cl-notes" placeholder="Pain points, conversation notes, what they need..."></textarea></div>
+      </div>
+      <div class="err" id="cl-err"></div>
+      <div class="btn-row" style="margin-top:4px">
+        <button class="btn primary" onclick="addClient()">Add to pipeline</button>
+        <button class="btn ghost" onclick="clearClientForm()">Clear</button>
+      </div>
     </div>
-    <p>This prints a long string starting with <code>ssh-ed25519</code>. Copy the entire output. Then:</p>
-    <ol>
-      <li>Go to <strong>github.com → Settings → SSH and GPG keys</strong></li>
-      <li>Click <strong>New SSH key</strong></li>
-      <li>Title: <code>My laptop</code> (or whatever describes your machine)</li>
-      <li>Paste the key into the Key field</li>
-      <li>Click <strong>Add SSH key</strong></li>
-    </ol>
-    <p>Test that it worked:</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal / Git Bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre>ssh -T git@github.com</pre>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterClients('all',this)">All</button>
+      <button class="filter-btn" onclick="filterClients('lead',this)">Leads</button>
+      <button class="filter-btn" onclick="filterClients('prospect',this)">Prospects</button>
+      <button class="filter-btn" onclick="filterClients('active',this)">Active</button>
+      <button class="filter-btn" onclick="filterClients('retainer',this)">Retainers</button>
+      <button class="filter-btn" onclick="filterClients('lost',this)">Lost</button>
     </div>
-    <p>You should see: <code>Hi yourusername! You've successfully authenticated...</code></p>
+    <div class="item-list" id="client-list"></div>
   </div>
 
-  <div class="divider"></div>
-
-  <!-- Phase 2 -->
-  <h2>Phase 2 — Set up your project</h2>
-
-  <h2 id="folder-setup">Step 4: Set up your project folder</h2>
-
-  <div class="step-card" data-step="Step 4.1">
-    <h3>Create the project directory</h3>
-    <p>Create a dedicated folder for this project on your computer. This folder will become a Git repository — a tracked, version-controlled directory. Put it somewhere logical in your file system.</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal / Git Bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre><span class="cm"># Navigate to where you keep your projects</span>
-<span class="cm"># Replace with your actual path — for example:</span>
-cd Documents
-
-<span class="cm"># Create the folder</span>
-mkdir workspace
-
-<span class="cm"># Enter the folder</span>
-cd workspace</pre>
+  <!-- Content ideas -->
+  <div id="panel-content" class="panel">
+    <div class="page-header">
+      <div class="page-title">Content ideas</div>
+      <div class="page-sub">Capture ideas before they disappear. Batch-produce on weekends.</div>
     </div>
-    <p>Your terminal prompt should now show you are inside the <code>workspace</code> folder.</p>
-  </div>
 
-  <div class="step-card" data-step="Step 4.2">
-    <h3>Initialize a Git repository</h3>
-    <p>This turns the folder into a Git-tracked project. Run this command from inside the <code>workspace</code> folder:</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal / Git Bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre>git init</pre>
+    <div class="card">
+      <div class="card-title">Capture idea</div>
+      <div class="form-grid">
+        <div class="field span2"><label>Idea / title *</label><input type="text" id="ci-title" placeholder="How I built a patient follow-up system for a dental clinic"></div>
+        <div class="field"><label>Platform</label>
+          <select id="ci-platform">
+            <option value="both">Instagram + TikTok</option>
+            <option value="ig">Instagram only</option>
+            <option value="tiktok">TikTok only</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="fb">Facebook</option>
+          </select>
+        </div>
+        <div class="field"><label>Format</label>
+          <select id="ci-format">
+            <option value="reel">Reel / short video</option>
+            <option value="carousel">Carousel</option>
+            <option value="post">Static post</option>
+            <option value="story">Story</option>
+          </select>
+        </div>
+        <div class="field"><label>Content type</label>
+          <select id="ci-type">
+            <option value="proof">Proof (show real work)</option>
+            <option value="problem">Problem → solution</option>
+            <option value="result">Client result</option>
+            <option value="insight">Industry insight</option>
+            <option value="process">Behind the scenes</option>
+          </select>
+        </div>
+        <div class="field"><label>Status</label>
+          <select id="ci-status">
+            <option value="idea">Idea</option>
+            <option value="scripted">Scripted</option>
+            <option value="recorded">Recorded</option>
+            <option value="published">Published</option>
+          </select>
+        </div>
+        <div class="field span2"><label>Hook / opening line</label><textarea id="ci-hook" placeholder="This clinic was managing patient follow-ups in a spreadsheet. Here's what I built..." style="min-height:56px"></textarea></div>
+        <div class="field span2"><label>Notes / talking points</label><textarea id="ci-notes" placeholder="Key points, visuals to capture, screen recordings needed..." style="min-height:56px"></textarea></div>
+      </div>
+      <div class="err" id="ci-err"></div>
+      <div class="btn-row" style="margin-top:4px">
+        <button class="btn primary" onclick="addIdea()">Save idea</button>
+        <button class="btn ghost" onclick="clearIdeaForm()">Clear</button>
+      </div>
     </div>
-    <p>You will see: <code>Initialized empty Git repository in .../workspace/.git/</code></p>
-    <p>A hidden <code>.git</code> folder now exists inside your directory. This is Git's database — do not delete or edit it.</p>
-  </div>
 
-  <!-- Save file -->
-  <h2 id="save-file">Step 5: Save your HTML file</h2>
-
-  <div class="step-card" data-step="Step 5.1">
-    <h3>Place the workspace.html file in the project folder</h3>
-    <p>Take the <code>workspace.html</code> file you downloaded from Claude and copy it into the <code>workspace</code> folder you just created.</p>
-    <p>Then rename it to <code>index.html</code>. This is critical — GitHub Pages looks for a file named exactly <code>index.html</code> to serve as the homepage of your site.</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal / Git Bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre><span class="cm"># If you placed workspace.html in the folder, rename it:</span>
-<span class="cm"># Mac / Git Bash on Windows:</span>
-mv workspace.html index.html</pre>
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterIdeas('all',this)">All</button>
+      <button class="filter-btn" onclick="filterIdeas('ig',this)">Instagram</button>
+      <button class="filter-btn" onclick="filterIdeas('tiktok',this)">TikTok</button>
+      <button class="filter-btn" onclick="filterIdeas('linkedin',this)">LinkedIn</button>
+      <button class="filter-btn" onclick="filterIdeas('proof',this)">Proof</button>
+      <button class="filter-btn" onclick="filterIdeas('result',this)">Results</button>
     </div>
-    <p>Alternatively, rename the file manually through your file explorer — just make sure it is called <code>index.html</code> exactly (lowercase, no spaces).</p>
+    <div class="item-list" id="idea-list"></div>
   </div>
 
-  <div class="step-card" data-step="Step 5.2">
-    <h3>Verify your folder structure</h3>
-    <p>Your <code>workspace</code> folder should contain exactly one file:</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal / Git Bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre>ls</pre>
+  <!-- Schedule -->
+  <div id="panel-schedule" class="panel">
+    <div class="page-header">
+      <div class="page-title">Weekly plan</div>
+      <div class="page-sub">Plan vs actual hours — white = planned, green-tinted = actual</div>
     </div>
-    <p>Output should be: <code>index.html</code></p>
-    <p>That is your entire project. One file. Clean and simple.</p>
-  </div>
 
-  <!-- Open in VS Code -->
-  <h2 id="open-vscode">Step 6: Open the project in VS Code</h2>
-
-  <div class="step-card" data-step="Step 6.1">
-    <h3>Open VS Code in the project folder</h3>
-    <p>From inside the <code>workspace</code> folder in your terminal, run:</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal / Git Bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre>code .</pre>
+    <div class="card">
+      <div style="overflow-x:auto">
+        <table class="sched-table" id="sched-table">
+          <thead>
+            <tr>
+              <th class="row-label" style="min-width:120px">Activity</th>
+              <th colspan="2">Mon</th><th colspan="2">Tue</th><th colspan="2">Wed</th>
+              <th colspan="2">Thu</th><th colspan="2">Fri</th><th colspan="2">Sat</th>
+              <th colspan="2">Sun</th>
+              <th>Total</th>
+            </tr>
+            <tr>
+              <th class="row-label"></th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th style="font-size:10px;color:var(--text-3);font-weight:400">Pl</th><th style="font-size:10px;color:var(--success);font-weight:400">Act</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="sched-body"></tbody>
+          <tfoot id="sched-foot"></tfoot>
+        </table>
+      </div>
+      <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:14px;font-size:12px;color:var(--text-2)">
+        <span>Planned: <strong id="s-planned" style="color:var(--text)">0h</strong></span>
+        <span>Actual: <strong id="s-actual" style="color:var(--success)">0h</strong></span>
+        <span>Budget: <strong style="color:var(--text)">25h</strong></span>
+      </div>
     </div>
-    <p>The dot <code>.</code> means "open the current folder." VS Code will open with your project loaded in the sidebar.</p>
-    <p>You can also open VS Code manually and use <strong>File → Open Folder</strong> to navigate to your <code>workspace</code> folder.</p>
-  </div>
 
-  <div class="step-card" data-step="Step 6.2">
-    <h3>Explore the VS Code interface</h3>
-    <p>The key areas you will use:</p>
-    <ul>
-      <li><strong>Explorer (left sidebar):</strong> shows your files. Click <code>index.html</code> to open it in the editor.</li>
-      <li><strong>Editor (center):</strong> where you read and edit your code.</li>
-      <li><strong>Terminal (bottom):</strong> open with <code>Ctrl + `</code> (backtick) on Windows or <code>Control + `</code> on Mac. This is where you run Git commands without leaving VS Code.</li>
-      <li><strong>Source Control (left sidebar, branch icon):</strong> shows your Git status visually.</li>
-      <li><strong>Go Live button (bottom-right):</strong> the Live Server button that previews your file in a browser.</li>
-    </ul>
-  </div>
-
-  <!-- Test locally -->
-  <h2 id="test-local">Step 7: Test your workspace locally</h2>
-
-  <div class="step-card" data-step="Step 7.1">
-    <h3>Launch Live Server</h3>
-    <p>With <code>index.html</code> open in the editor:</p>
-    <ul>
-      <li>Click the <strong>Go Live</strong> button in the bottom-right corner of VS Code</li>
-      <li>Your default browser will open with your workspace running at <code>http://127.0.0.1:5500/index.html</code></li>
-    </ul>
-    <p>This is a local server running on your machine. No internet connection required. Every time you save <code>index.html</code> in VS Code (<code>Ctrl+S</code> / <code>Command+S</code>), the browser will automatically refresh.</p>
-  </div>
-
-  <div class="step-card" data-step="Step 7.2">
-    <h3>Verify everything works</h3>
-    <p>Walk through each section of the workspace and confirm the following:</p>
-    <ul>
-      <li>Dashboard loads and shows zero values</li>
-      <li>You can add a priority task and it appears in the list</li>
-      <li>You can add a project and it appears in the Projects tab</li>
-      <li>You can add a client and it appears in the Clients tab</li>
-      <li>Close the browser tab and reopen it — your data should still be there (localStorage is working)</li>
-    </ul>
-    <div class="callout success">
-      <span class="callout-icon">✓</span>
-      <div class="callout-body"><p>If everything works locally, you are ready to deploy. If something looks broken, let me know and we can fix it before deploying.</p></div>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- Phase 3 -->
-  <h2>Phase 3 — Connect to GitHub</h2>
-
-  <h2 id="create-repo">Step 8: Create a GitHub repository</h2>
-
-  <div class="step-card" data-step="Step 8.1">
-    <h3>Create a new repository on GitHub</h3>
-    <ol>
-      <li>Go to <strong>github.com</strong> and log in</li>
-      <li>Click the <strong>+</strong> icon in the top-right corner → <strong>New repository</strong></li>
-      <li>Fill in the form:
-        <ul>
-          <li><strong>Repository name:</strong> <code>workspace</code> (this becomes part of your URL)</li>
-          <li><strong>Description:</strong> <code>Personal business workspace</code> (optional)</li>
-          <li><strong>Visibility:</strong> <strong>Public</strong> — GitHub Pages requires public repositories on the free plan</li>
-          <li><strong>Do NOT</strong> check "Add a README file"</li>
-          <li><strong>Do NOT</strong> add a .gitignore or license</li>
-        </ul>
-      </li>
-      <li>Click <strong>Create repository</strong></li>
-    </ol>
-  </div>
-
-  <div class="step-card" data-step="Step 8.2">
-    <h3>Copy your repository URL</h3>
-    <p>After creating the repository, GitHub shows you a page with setup instructions. Find the SSH URL at the top — it looks like:</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Your repository URL</span></div>
-      <pre>git@github.com:yourusername/workspace.git</pre>
-    </div>
-    <p>Make sure you are looking at the <strong>SSH</strong> tab (not HTTPS) since you set up SSH authentication in Step 3. Copy this URL — you will use it in the next step.</p>
-  </div>
-
-  <!-- Connect Git -->
-  <h2 id="connect-git">Step 9: Connect your local folder to GitHub</h2>
-
-  <div class="step-card" data-step="Step 9.1">
-    <h3>Link the local repository to GitHub</h3>
-    <p>In your terminal (either in VS Code or Git Bash), make sure you are inside the <code>workspace</code> folder. Then run:</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal / Git Bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre><span class="cm"># Connect your local folder to the GitHub repository</span>
-<span class="cm"># Replace yourusername with your actual GitHub username</span>
-git remote add origin git@github.com:yourusername/workspace.git
-
-<span class="cm"># Set the default branch name to "main"</span>
-git branch -M main</pre>
-    </div>
-    <p>No output means it worked correctly.</p>
-  </div>
-
-  <!-- Push code -->
-  <h2 id="push-code">Step 10: Push your code to GitHub</h2>
-
-  <p>Pushing means sending your local files up to GitHub. You do this in three commands that you will use every time you update your workspace in the future.</p>
-
-  <div class="step-card" data-step="Step 10.1">
-    <h3>Stage, commit, and push</h3>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal / Git Bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre><span class="cm"># Stage all files (tells Git which files to include in the commit)</span>
-git add .
-
-<span class="cm"># Commit — save a snapshot of your code with a description</span>
-git commit -m <span class="str">"Initial commit: business workspace"</span>
-
-<span class="cm"># Push — send your code to GitHub</span>
-git push -u origin main</pre>
-    </div>
-    <p>The <code>-u origin main</code> flag on the first push sets the default remote branch. After the first push, you only need to type <code>git push</code> for future updates.</p>
-  </div>
-
-  <div class="step-card" data-step="Step 10.2">
-    <h3>Verify on GitHub</h3>
-    <p>Go to <strong>github.com/yourusername/workspace</strong> in your browser. You should see your <code>index.html</code> file listed in the repository. If you see it, your code is on GitHub.</p>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- Phase 4 -->
-  <h2>Phase 4 — Deploy to GitHub Pages</h2>
-
-  <h2 id="enable-pages">Step 11: Enable GitHub Pages</h2>
-
-  <div class="step-card" data-step="Step 11.1">
-    <h3>Turn on GitHub Pages in your repository settings</h3>
-    <ol>
-      <li>In your repository on GitHub, click the <strong>Settings</strong> tab (top navigation, rightmost option)</li>
-      <li>In the left sidebar, click <strong>Pages</strong></li>
-      <li>Under <strong>Source</strong>, click the dropdown that says "None" and select <strong>Deploy from a branch</strong></li>
-      <li>Under <strong>Branch</strong>, select <strong>main</strong> from the dropdown</li>
-      <li>Leave the folder set to <strong>/ (root)</strong></li>
-      <li>Click <strong>Save</strong></li>
-    </ol>
-  </div>
-
-  <div class="step-card" data-step="Step 11.2">
-    <h3>Wait for deployment</h3>
-    <p>GitHub Pages takes <strong>1–5 minutes</strong> to deploy for the first time. You can watch the progress:</p>
-    <ul>
-      <li>Go to the <strong>Actions</strong> tab of your repository</li>
-      <li>You will see a workflow called "pages build and deployment" running</li>
-      <li>A yellow circle means it is in progress</li>
-      <li>A green checkmark means it is complete and your site is live</li>
-    </ul>
-    <div class="callout warning">
-      <span class="callout-icon">⚠</span>
-      <div class="callout-body"><p>Do not refresh the Settings → Pages screen too quickly. Wait for the Actions workflow to complete. The URL will appear on the Pages settings page once deployment finishes.</p></div>
+    <div class="card">
+      <div class="card-title">Evening routine</div>
+      <div class="routine-item"><span class="routine-time">7:30</span><span class="routine-text">Dinner and decompress — no laptop yet</span></div>
+      <div class="routine-item accent"><span class="routine-time">8:00</span><span class="routine-text">Outreach block — 30 min of focused DMs and Facebook group engagement. No multitasking.</span></div>
+      <div class="routine-item"><span class="routine-time">8:30</span><span class="routine-text">Client work or portfolio build — your deepest focus block of the evening</span></div>
+      <div class="routine-item pro"><span class="routine-time">10:30</span><span class="routine-text">Content batch — 2–3× per week only. Screen record, edit, schedule. Skip on heavy client nights.</span></div>
+      <div class="routine-item"><span class="routine-time">11:30</span><span class="routine-text">Stop. Sleep protects your day job performance — the income that funds this business.</span></div>
     </div>
   </div>
 
-  <!-- Verify -->
-  <h2 id="verify-live">Step 12: Verify your site is live</h2>
-
-  <div class="step-card" data-step="Step 12.1">
-    <h3>Open your live URL</h3>
-    <p>After the deployment workflow completes, go back to <strong>Settings → Pages</strong>. You will see a green banner that says:</p>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Your live URL</span></div>
-      <pre>Your site is live at https://yourusername.github.io/workspace</pre>
+  <!-- Folder structure -->
+  <div id="panel-folders" class="panel">
+    <div class="page-header">
+      <div class="page-title">Folder structure</div>
+      <div class="page-sub">Copy this to your computer. Click folders to expand or collapse.</div>
     </div>
-    <p>Click the URL. Your workspace should open in the browser — running live on the internet, accessible from any device.</p>
-    <p>Bookmark this URL. Add it to your phone's home screen. Share it with no one (it is public but obscure — no one will find it unless you share the link).</p>
-  </div>
-
-  <div class="step-card" data-step="Step 12.2">
-    <h3>Add to your phone's home screen</h3>
-    <p>This turns your workspace into a pseudo-app on your phone:</p>
-    <ul>
-      <li><strong>iPhone (Safari):</strong> open the URL in Safari → tap the Share button → tap "Add to Home Screen" → tap Add</li>
-      <li><strong>Android (Chrome):</strong> open the URL in Chrome → tap the three-dot menu → tap "Add to Home screen" → tap Add</li>
-    </ul>
-    <p>The workspace will appear as an icon on your home screen and open in full-screen mode when tapped.</p>
-
-    <div class="callout info">
-      <span class="callout-icon">ℹ</span>
-      <div class="callout-body"><p><strong>Remember:</strong> data is stored per browser. Your phone and your laptop have separate localStorage. Use the Export backup button on each device to keep your data in sync, or enter data on one primary device and treat others as read-only.</p></div>
+    <div class="card">
+      <div class="tree" id="folder-tree"></div>
     </div>
-  </div>
-
-  <!-- Custom domain -->
-  <h2 id="custom-domain">Step 13: Custom domain (optional)</h2>
-  <p>If you own a domain name (for example <code>yourdomain.com</code>), you can make your workspace available at a cleaner URL like <code>workspace.yourdomain.com</code>. This is entirely optional and costs nothing beyond your domain registration.</p>
-
-  <div class="step-card" data-step="Step 13.1">
-    <h3>Point a subdomain at GitHub Pages</h3>
-    <ol>
-      <li>In your domain registrar's DNS settings, add a <strong>CNAME record</strong>:
-        <ul>
-          <li><strong>Name:</strong> <code>workspace</code> (or whatever subdomain you want)</li>
-          <li><strong>Value:</strong> <code>yourusername.github.io</code></li>
-          <li><strong>TTL:</strong> 3600 (or Auto)</li>
-        </ul>
-      </li>
-      <li>In your GitHub repository, go to <strong>Settings → Pages → Custom domain</strong></li>
-      <li>Enter <code>workspace.yourdomain.com</code> and click Save</li>
-      <li>Create a file called <code>CNAME</code> (no extension) in your project with just the domain on one line</li>
-      <li>Push that file to GitHub</li>
-    </ol>
-    <p>DNS changes can take up to 24 hours to propagate. GitHub will also automatically issue an SSL certificate (HTTPS) once it sees your domain.</p>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- Maintenance -->
-  <h2>Maintenance and ongoing use</h2>
-
-  <h2 id="update-workflow">How to update your workspace</h2>
-  <p>Every time you want to add a new feature, fix something, or change the design of your workspace, this is the workflow:</p>
-
-  <div class="step-card" data-step="Update workflow">
-    <h3>The three-command update cycle</h3>
-    <ol>
-      <li>Open VS Code and edit <code>index.html</code></li>
-      <li>Preview your changes using Live Server</li>
-      <li>When you are satisfied, open the terminal and run:</li>
-    </ol>
-    <div class="code-block">
-      <div class="code-header"><span class="lang">Terminal / VS Code terminal</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-      <pre><span class="cm"># Stage your changes</span>
-git add .
-
-<span class="cm"># Commit with a description of what you changed</span>
-git commit -m <span class="str">"Add export to CSV feature"</span>
-
-<span class="cm"># Push to GitHub (site updates in 1-2 minutes)</span>
-git push</pre>
+    <div class="card">
+      <div class="card-title">Why this structure</div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;color:var(--text-2)">
+        <div><strong style="color:var(--text)">01-clients/</strong> — One subfolder per client keeps all files, contracts, invoices, and assets together. Never search for a client file again.</div>
+        <div><strong style="color:var(--text)">02-portfolio/</strong> — Live demos ready to show instantly. Case studies ready to post on Contra and LinkedIn. Screenshots for content creation.</div>
+        <div><strong style="color:var(--text)">03-products/</strong> — Where client patterns become reusable systems. Start filling this when you see the same problem across three clients.</div>
+        <div><strong style="color:var(--text)">04-content/</strong> — Batched by week. Raw recordings separate from edited exports. Never lose an asset or confuse a draft with a final.</div>
+        <div><strong style="color:var(--text)">05-business/</strong> — One proposal template you reuse forever. Contracts, invoices, and your finance tracker in one place.</div>
+        <div><strong style="color:var(--text)">06-learning/</strong> — Notes and code experiments that belong to no client project.</div>
+      </div>
     </div>
-    <p>Your live site will reflect the changes within one to two minutes. You can watch the deployment in the <strong>Actions</strong> tab of your GitHub repository.</p>
-  </div>
-
-  <table>
-    <thead>
-      <tr><th>Git command</th><th>What it does</th><th>When to use it</th></tr>
-    </thead>
-    <tbody>
-      <tr><td><code>git add .</code></td><td>Stages all changed files for the next commit</td><td>Every time before committing</td></tr>
-      <tr><td><code>git commit -m "message"</code></td><td>Saves a labeled snapshot of your staged changes</td><td>After staging, before pushing</td></tr>
-      <tr><td><code>git push</code></td><td>Sends committed changes to GitHub</td><td>After committing, to go live</td></tr>
-      <tr><td><code>git status</code></td><td>Shows which files have changed since last commit</td><td>Any time you want to check</td></tr>
-      <tr><td><code>git log --oneline</code></td><td>Shows recent commit history</td><td>When you want to review changes</td></tr>
-    </tbody>
-  </table>
-
-  <!-- Backup -->
-  <h2 id="backup">Backing up your workspace data</h2>
-  <p>Your workspace data — projects, clients, content ideas, schedule — lives in your browser's localStorage. The HTML file on GitHub Pages is just the code shell. Understand this distinction clearly:</p>
-
-  <table>
-    <thead>
-      <tr><th>What lives on GitHub</th><th>What lives in your browser</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>The HTML file (code + structure)</td><td>All your projects, clients, ideas, priorities</td></tr>
-      <tr><td>Backed up automatically with every push</td><td>Only backed up when you use the Export button</td></tr>
-      <tr><td>Accessible from any device</td><td>Only on the specific browser you entered it in</td></tr>
-    </tbody>
-  </table>
-
-  <div class="callout warning">
-    <span class="callout-icon">⚠</span>
-    <div class="callout-body"><p><strong>Export your data weekly.</strong> Click the "Export backup" button in the bottom-left sidebar of your workspace. Save the downloaded JSON file to a cloud storage service like Google Drive or Dropbox. If you ever clear your browser history or switch computers, you will lose your data without this backup.</p></div>
-  </div>
-
-  <div class="step-card" data-step="Future upgrade">
-    <h3>When your data needs grow: migrate to a database</h3>
-    <p>localStorage is sufficient when you are the only user on one or two devices. When you want real sync across devices, you have two upgrade paths:</p>
-    <ul>
-      <li><strong>Supabase (free tier):</strong> a hosted PostgreSQL database with a JavaScript SDK. You can add it to your existing HTML file. Free tier gives you 500MB and 2GB bandwidth per month — more than enough for personal use indefinitely.</li>
-      <li><strong>Firebase Firestore (free tier):</strong> Google's real-time database. Also free for personal scale. Slightly easier to set up than Supabase for a simple single-user app.</li>
-    </ul>
-    <p>Both are a meaningful technical step up from what you have now, but they are natural next projects once you have outgrown localStorage. Come back to this when you feel ready to level up the tech.</p>
-  </div>
-
-  <!-- Troubleshooting -->
-  <h2 id="troubleshooting">Troubleshooting</h2>
-
-  <h3>Site not loading after enabling Pages</h3>
-  <p>Wait five minutes and hard-refresh the browser (<code>Ctrl+Shift+R</code> on Windows, <code>Command+Shift+R</code> on Mac). Check the <strong>Actions</strong> tab in your GitHub repository — if the workflow shows a red X, click it to see the error message.</p>
-
-  <h3>Page shows a 404 error</h3>
-  <p>This almost always means the file is not named exactly <code>index.html</code> (all lowercase). Check your repository on GitHub and confirm the filename. If it is <code>Index.html</code> or <code>workspace.html</code>, rename it and push again.</p>
-
-  <h3>Git push is rejected</h3>
-  <div class="code-block">
-    <div class="code-header"><span class="lang">Terminal / Git Bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
-    <pre><span class="cm"># If you get a rejection error, pull first then push</span>
-git pull origin main --rebase
-git push</pre>
-  </div>
-
-  <h3>SSH authentication fails</h3>
-  <p>Run <code>ssh -T git@github.com</code> to test your connection. If it fails, go back to Step 3.2 and verify your SSH key is added to your GitHub account correctly. On Windows, make sure you are using Git Bash, not PowerShell or Command Prompt, for SSH commands.</p>
-
-  <h3>VS Code terminal does not recognize git</h3>
-  <p>On Windows, set the default terminal in VS Code to <strong>Git Bash</strong>: press <code>Ctrl+Shift+P</code>, type "Select Default Profile", and choose Git Bash. Close and reopen the terminal.</p>
-
-  <h3>My data disappeared</h3>
-  <p>localStorage data is browser-specific and can be cleared if you clear your browser history and check "Cookies and site data." Always use the Export backup button before clearing your browser. If you have a backup JSON file, you can re-import data by adding an import feature — ask Claude to add an import button to your workspace HTML.</p>
-
-  <div class="divider"></div>
-
-  <!-- Completion checklist -->
-  <h2>Deployment checklist</h2>
-  <p>Use this to track your progress through the guide. Click each item to mark it done.</p>
-
-  <ul class="checklist" id="checklist">
-    <li><span class="check" onclick="toggleCheck(this)"></span>Git installed and version verified</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>Git configured with name and email</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>VS Code installed</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>Live Server extension installed</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>GitHub account created</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>SSH key generated and added to GitHub</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>Project folder created and Git initialized</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>workspace.html renamed to index.html and placed in project folder</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>Workspace tested locally with Live Server</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>GitHub repository created (public)</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>Local repository connected to GitHub with git remote add origin</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>Code pushed to GitHub with git push</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>GitHub Pages enabled in repository settings</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>Deployment workflow completed (green checkmark in Actions)</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>Live URL verified in browser</li>
-    <li><span class="check" onclick="toggleCheck(this)"></span>URL bookmarked and/or added to phone home screen</li>
-  </ul>
-
-  <div class="callout success">
-    <span class="callout-icon">✓</span>
-    <div class="callout-body"><p><strong>All done.</strong> Your workspace is live. The three commands you will use from now on are <code>git add .</code>, <code>git commit -m "message"</code>, and <code>git push</code>. That is the entire update workflow.</p></div>
-  </div>
-
-  <div class="doc-footer">
-    <p>Built for your freelance development business. Keep this guide — the same Git workflow applies to every web project you build for clients.</p>
   </div>
 
 </main>
 </div>
 
+<div id="toast"></div>
+
 <script>
-function copyCode(btn) {
-  const pre = btn.closest('.code-block').querySelector('pre');
-  const text = pre.innerText;
-  navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = 'Copied';
-    setTimeout(() => btn.textContent = 'Copy', 1800);
-  });
+// ── State ──────────────────────────────────────────────────
+const DB = {
+  get(k){ try{ return JSON.parse(localStorage.getItem('ws_'+k)||'null') }catch(e){return null} },
+  set(k,v){ try{ localStorage.setItem('ws_'+k,JSON.stringify(v)) }catch(e){} }
+};
+
+let projects  = DB.get('projects')  || [];
+let clients   = DB.get('clients')   || [];
+let ideas     = DB.get('ideas')     || [];
+let priorities= DB.get('priorities')|| [];
+let schedule  = DB.get('schedule')  || {};
+const revenue = DB.get('revenue')   || {goal:2000,earned:0};
+
+const ACTIVITIES = [
+  { key:'client',    label:'Client work',     color:'var(--accent)' },
+  { key:'outreach',  label:'Outreach / sales',color:'var(--success)' },
+  { key:'content',   label:'Content creation',color:'var(--pro)' },
+  { key:'portfolio', label:'Portfolio / learning',color:'var(--warning)' }
+];
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+// initialise missing schedule keys
+ACTIVITIES.forEach(a=>{
+  if(!schedule[a.key]) schedule[a.key]={};
+  DAYS.forEach(d=>{ if(!schedule[a.key][d]) schedule[a.key][d]={p:'',a:''}; });
+});
+
+// ── Navigation ─────────────────────────────────────────────
+function nav(id, btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
 }
 
-function toggleCheck(el) {
-  el.classList.toggle('done');
-  el.textContent = el.classList.contains('done') ? '✓' : '';
+// ── Toast ──────────────────────────────────────────────────
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
 }
 
-// Active TOC link on scroll
-const headings = document.querySelectorAll('h2[id], h3[id]');
-const tocLinks = document.querySelectorAll('.toc a');
-function updateActiveToc() {
-  let current = '';
-  headings.forEach(h => {
-    if (window.scrollY >= h.offsetTop - 80) current = h.id;
-  });
-  tocLinks.forEach(a => {
-    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
-  });
+// ── Dashboard ──────────────────────────────────────────────
+function updateDashboard(){
+  const now = new Date();
+  document.getElementById('dash-date').textContent =
+    now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  document.getElementById('d-projects').textContent = projects.filter(p=>p.status!='done').length;
+  document.getElementById('d-clients').textContent  = clients.length;
+  document.getElementById('d-revenue').textContent  = '$' + clients.reduce((s,c)=>s+(parseInt(c.value)||0),0).toLocaleString();
+  document.getElementById('d-ideas').textContent    = ideas.length;
+
+  document.getElementById('nav-projects').textContent = projects.filter(p=>p.status!='done').length;
+  document.getElementById('nav-clients').textContent  = clients.length;
+  document.getElementById('nav-content').textContent  = ideas.length;
+
+  renderPriorities();
+  updateRevenueDisplay();
+  updateWeeklyHours();
+  renderDashClients();
 }
-window.addEventListener('scroll', updateActiveToc, { passive: true });
-updateActiveToc();
+
+function renderDashClients(){
+  const el = document.getElementById('dash-clients-recent');
+  const recent = [...clients].slice(-4).reverse();
+  if(!recent.length){ el.innerHTML='<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>No clients added yet.</div>'; return; }
+  el.innerHTML = recent.map(c=>`
+    <div class="item">
+      <div class="avatar">${c.name.charAt(0).toUpperCase()}</div>
+      <div class="item-main">
+        <div class="item-name">${c.name}${c.industry?' <span style="font-weight:400;color:var(--text-2)">· '+c.industry+'</span>':''}</div>
+        <div class="item-sub">${c.next||'No next step set'}</div>
+      </div>
+      <span class="badge ${c.stage}">${stageLabel(c.stage)}</span>
+    </div>`).join('');
+}
+
+// ── Revenue ────────────────────────────────────────────────
+function saveRevenue(){
+  revenue.goal   = parseInt(document.getElementById('rv-goal').value)||2000;
+  revenue.earned = parseInt(document.getElementById('rv-earned').value)||0;
+  DB.set('revenue', revenue);
+  updateRevenueDisplay();
+}
+function updateRevenueDisplay(){
+  const g=revenue.goal, e=revenue.earned;
+  const pct=Math.min(100, Math.round((e/g)*100));
+  document.getElementById('rv-goal').value = g;
+  document.getElementById('rv-earned').value = e;
+  document.getElementById('rv-goal-lbl').textContent  = '$'+g.toLocaleString();
+  document.getElementById('rv-earned-lbl').textContent= '$'+e.toLocaleString();
+  document.getElementById('rv-bar').style.width = pct+'%';
+  document.getElementById('rv-pct').textContent = pct+'% of goal';
+}
+
+// ── Priorities ─────────────────────────────────────────────
+function addPriority(){
+  const inp = document.getElementById('p-input');
+  const v = inp.value.trim();
+  if(!v) return;
+  priorities.push({ text:v, done:false });
+  DB.set('priorities', priorities);
+  inp.value='';
+  renderPriorities();
+}
+function togglePriority(i){ priorities[i].done = !priorities[i].done; DB.set('priorities',priorities); renderPriorities(); }
+function deletePriority(i){ priorities.splice(i,1); DB.set('priorities',priorities); renderPriorities(); }
+function renderPriorities(){
+  const el = document.getElementById('priority-list');
+  if(!priorities.length){
+    el.innerHTML='<div style="font-size:13px;color:var(--text-3);padding:4px 0">No priorities yet.</div>'; return;
+  }
+  el.innerHTML = priorities.map((p,i)=>`
+    <div class="priority-item ${p.done?'done':''}">
+      <input type="checkbox" ${p.done?'checked':''} onchange="togglePriority(${i})">
+      <span class="p-text">${p.text}</span>
+      <button class="btn ghost icon" onclick="deletePriority(${i})" style="padding:3px;color:var(--text-3)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>`).join('');
+}
+
+// ── Projects ───────────────────────────────────────────────
+function addProject(){
+  const name = document.getElementById('pj-name').value.trim();
+  const err  = document.getElementById('pj-err');
+  if(!name){ err.textContent='Enter a project name.'; return; }
+  err.textContent='';
+  projects.push({
+    id: Date.now(),
+    name,
+    client:   document.getElementById('pj-client').value.trim(),
+    status:   document.getElementById('pj-status').value,
+    priority: document.getElementById('pj-priority').value,
+    value:    document.getElementById('pj-value').value,
+    deadline: document.getElementById('pj-deadline').value,
+    notes:    document.getElementById('pj-notes').value.trim(),
+    progress: parseInt(document.getElementById('pj-progress').value)
+  });
+  DB.set('projects', projects);
+  clearProjectForm();
+  renderProjects('all');
+  updateDashboard();
+  toast('Project saved.');
+}
+function deleteProject(id){ projects=projects.filter(p=>p.id!=id); DB.set('projects',projects); renderProjects(currentProjectFilter); updateDashboard(); }
+function clearProjectForm(){
+  ['pj-name','pj-client','pj-value','pj-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('pj-deadline').value='';
+  document.getElementById('pj-progress').value=0;
+  document.getElementById('pj-prog-val').textContent='0%';
+  document.getElementById('pj-status').value='todo';
+  document.getElementById('pj-priority').value='high';
+  document.getElementById('pj-err').textContent='';
+}
+let currentProjectFilter='all';
+function filterProjects(f,btn){
+  currentProjectFilter=f;
+  document.querySelectorAll('#panel-projects .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProjects(f);
+}
+function renderProjects(f){
+  const el = document.getElementById('project-list');
+  let list = f==='all' ? projects
+           : f==='high' ? projects.filter(p=>p.priority==='high')
+           : projects.filter(p=>p.status===f);
+  if(!list.length){ el.innerHTML=emptyState('No projects in this view.'); return; }
+  const statusLabel = {todo:'To do',progress:'In progress',done:'Done'};
+  el.innerHTML = list.map(p=>`
+    <div class="item column">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="item-main">
+          <div class="item-name">${p.name}</div>
+          <div class="item-sub">${[p.client,p.deadline?'Due '+fmtDate(p.deadline):'',p.value?'$'+parseInt(p.value).toLocaleString():''].filter(Boolean).join(' · ')}</div>
+        </div>
+        <span class="badge ${p.priority}">${p.priority}</span>
+        <span class="badge ${p.status}">${statusLabel[p.status]}</span>
+        <button class="btn danger sm" onclick="deleteProject(${p.id})">Delete</button>
+      </div>
+      <div class="prog-track"><div class="prog-fill ${p.status==='done'?'success':''}" style="width:${p.progress}%"></div></div>
+      <div style="font-size:11px;color:var(--text-3);margin-top:4px">${p.progress}% complete${p.notes?' · '+p.notes.substring(0,80)+(p.notes.length>80?'...':''):''}</div>
+    </div>`).join('');
+}
+
+// ── Clients ────────────────────────────────────────────────
+function addClient(){
+  const name = document.getElementById('cl-name').value.trim();
+  const err  = document.getElementById('cl-err');
+  if(!name){ err.textContent='Enter a client or business name.'; return; }
+  err.textContent='';
+  clients.push({
+    id:      Date.now(),
+    name,
+    industry: document.getElementById('cl-industry').value.trim(),
+    stage:    document.getElementById('cl-stage').value,
+    source:   document.getElementById('cl-source').value,
+    value:    document.getElementById('cl-value').value,
+    next:     document.getElementById('cl-next').value.trim(),
+    contact:  document.getElementById('cl-contact').value.trim(),
+    followup: document.getElementById('cl-followup').value,
+    notes:    document.getElementById('cl-notes').value.trim()
+  });
+  DB.set('clients', clients);
+  clearClientForm();
+  renderClients(currentClientFilter);
+  updateDashboard();
+  toast('Client added to pipeline.');
+}
+function deleteClient(id){ clients=clients.filter(c=>c.id!=id); DB.set('clients',clients); renderClients(currentClientFilter); updateDashboard(); }
+function clearClientForm(){
+  ['cl-name','cl-industry','cl-value','cl-next','cl-contact','cl-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('cl-followup').value='';
+  document.getElementById('cl-stage').value='lead';
+  document.getElementById('cl-source').value='fb';
+  document.getElementById('cl-err').textContent='';
+}
+let currentClientFilter='all';
+function filterClients(f,btn){
+  currentClientFilter=f;
+  document.querySelectorAll('#panel-clients .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderClients(f);
+}
+const sourceLabel = {fb:'Facebook',ig:'Instagram',upwork:'Upwork',contra:'Contra',fiverr:'Fiverr',referral:'Referral',linkedin:'LinkedIn',other:'Other'};
+function stageLabel(s){ return {lead:'Lead',prospect:'Prospect',active:'Active',retainer:'Retainer',lost:'Lost'}[s]||s; }
+function renderClients(f){
+  const el = document.getElementById('client-list');
+  const list = f==='all' ? clients : clients.filter(c=>c.stage===f);
+  if(!list.length){ el.innerHTML=emptyState('No clients in this stage.'); return; }
+  el.innerHTML = list.map(c=>`
+    <div class="item">
+      <div class="avatar">${c.name.charAt(0).toUpperCase()}</div>
+      <div class="item-main">
+        <div class="item-name">${c.name}${c.industry?` <span style="font-weight:400;color:var(--text-2)">· ${c.industry}</span>`:''}</div>
+        <div class="item-sub">${[c.value?'$'+parseInt(c.value).toLocaleString():'', 'via '+sourceLabel[c.source], c.followup?'Follow-up: '+fmtDate(c.followup):''].filter(Boolean).join(' · ')}</div>
+        ${c.next?`<div class="item-sub" style="margin-top:3px;color:var(--accent)">→ ${c.next}</div>`:''}
+        ${c.notes?`<div class="item-sub" style="margin-top:3px">${c.notes.substring(0,100)}${c.notes.length>100?'...':''}</div>`:''}
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+        <span class="badge ${c.stage}">${stageLabel(c.stage)}</span>
+        <button class="btn danger sm" onclick="deleteClient(${c.id})">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── Ideas ──────────────────────────────────────────────────
+function addIdea(){
+  const title = document.getElementById('ci-title').value.trim();
+  const err   = document.getElementById('ci-err');
+  if(!title){ err.textContent='Enter an idea title.'; return; }
+  err.textContent='';
+  ideas.push({
+    id:       Date.now(),
+    title,
+    platform: document.getElementById('ci-platform').value,
+    format:   document.getElementById('ci-format').value,
+    type:     document.getElementById('ci-type').value,
+    status:   document.getElementById('ci-status').value,
+    hook:     document.getElementById('ci-hook').value.trim(),
+    notes:    document.getElementById('ci-notes').value.trim(),
+    date:     new Date().toISOString().slice(0,10)
+  });
+  DB.set('ideas', ideas);
+  clearIdeaForm();
+  renderIdeas(currentIdeaFilter);
+  updateDashboard();
+  toast('Idea saved.');
+}
+function deleteIdea(id){ ideas=ideas.filter(i=>i.id!=id); DB.set('ideas',ideas); renderIdeas(currentIdeaFilter); updateDashboard(); }
+function clearIdeaForm(){
+  ['ci-title','ci-hook','ci-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('ci-platform').value='both';
+  document.getElementById('ci-format').value='reel';
+  document.getElementById('ci-type').value='proof';
+  document.getElementById('ci-status').value='idea';
+  document.getElementById('ci-err').textContent='';
+}
+let currentIdeaFilter='all';
+function filterIdeas(f,btn){
+  currentIdeaFilter=f;
+  document.querySelectorAll('#panel-content .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderIdeas(f);
+}
+const platLabel = {both:'IG + TikTok',ig:'Instagram',tiktok:'TikTok',linkedin:'LinkedIn',fb:'Facebook'};
+const typeLabel  = {proof:'Proof',problem:'Problem → solution',result:'Client result',insight:'Industry insight',process:'Behind the scenes'};
+const fmtLabel   = {reel:'Reel',carousel:'Carousel',post:'Static post',story:'Story'};
+const ideaStatusLabel = {idea:'Idea',scripted:'Scripted',recorded:'Recorded',published:'Published'};
+function renderIdeas(f){
+  const el = document.getElementById('idea-list');
+  const list = f==='all' ? ideas
+             : ideas.filter(i=>i.platform===f||i.platform==='both'&&(f==='ig'||f==='tiktok')||i.type===f);
+  if(!list.length){ el.innerHTML=emptyState('No ideas in this view.'); return; }
+  el.innerHTML = list.map(d=>`
+    <div class="item column">
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <div class="item-main">
+          <div class="item-name">${d.title}</div>
+          <div class="item-sub">${fmtLabel[d.format]} · ${typeLabel[d.type]} · ${ideaStatusLabel[d.status]} · ${fmtDate(d.date)}</div>
+          ${d.hook?`<div class="item-sub" style="margin-top:5px;font-style:italic;color:var(--text)">"${d.hook.substring(0,120)}${d.hook.length>120?'...':''}"</div>`:''}
+          ${d.notes?`<div class="item-sub" style="margin-top:3px">${d.notes.substring(0,100)}${d.notes.length>100?'...':''}</div>`:''}
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+          <span class="badge ${d.platform}">${platLabel[d.platform]}</span>
+          <span class="badge ${d.type}">${typeLabel[d.type]}</span>
+          <button class="btn danger sm" onclick="deleteIdea(${d.id})">Delete</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── Schedule ───────────────────────────────────────────────
+function buildScheduleTable(){
+  const tbody = document.getElementById('sched-body');
+  const tfoot = document.getElementById('sched-foot');
+  tbody.innerHTML = ACTIVITIES.map(a=>`
+    <tr>
+      <td class="activity-name" style="color:${a.color}">${a.label}</td>
+      ${DAYS.map(d=>`
+        <td><input type="number" min="0" max="12" step="0.5" placeholder="—"
+          value="${schedule[a.key][d].p||''}"
+          oninput="updateSched('${a.key}','${d}','p',this.value)"></td>
+        <td><input type="number" min="0" max="12" step="0.5" placeholder="—" class="actual"
+          value="${schedule[a.key][d].a||''}"
+          oninput="updateSched('${a.key}','${d}','a',this.value)"></td>`).join('')}
+      <td class="row-total" id="rt-${a.key}">0h</td>
+    </tr>`).join('');
+  updateScheduleTotals();
+}
+function updateSched(key,day,type,val){
+  schedule[key][day][type]=val;
+  DB.set('schedule',schedule);
+  updateScheduleTotals();
+  updateWeeklyHours();
+}
+function updateScheduleTotals(){
+  let totalPl=0, totalAct=0;
+  ACTIVITIES.forEach(a=>{
+    let row=0;
+    DAYS.forEach(d=>{
+      row += parseFloat(schedule[a.key][d].a||schedule[a.key][d].p||0);
+      totalPl  += parseFloat(schedule[a.key][d].p||0);
+      totalAct += parseFloat(schedule[a.key][d].a||0);
+    });
+    const el=document.getElementById('rt-'+a.key);
+    if(el) el.textContent=Math.round(row*10)/10+'h';
+  });
+  document.getElementById('s-planned').textContent=Math.round(totalPl*10)/10+'h';
+  document.getElementById('s-actual').textContent=Math.round(totalAct*10)/10+'h';
+}
+function updateWeeklyHours(){
+  const sum=k=>DAYS.reduce((s,d)=>s+parseFloat(schedule[k][d].a||schedule[k][d].p||0),0);
+  const c=sum('client'), o=sum('outreach'), co=sum('content'), po=sum('portfolio');
+  document.getElementById('wh-client').textContent=Math.round(c*10)/10+'h';
+  document.getElementById('wh-outreach').textContent=Math.round(o*10)/10+'h';
+  document.getElementById('wh-content').textContent=Math.round(co*10)/10+'h';
+  document.getElementById('wh-total').textContent=Math.round((c+o+co+po)*10)/10+'h';
+}
+
+// ── Folder tree ────────────────────────────────────────────
+const FOLDERS = [
+  {n:'FreelanceBusiness/', c:[
+    {n:'01-clients/', c:[
+      {n:'[ClientName-2026]/', c:[
+        {n:'01-brief/'},{n:'02-deliverables/'},{n:'03-assets/'},{n:'04-invoices/'},{n:'05-comms/'}
+      ]},
+      {n:'_template-client-folder/'}
+    ]},
+    {n:'02-portfolio/', c:[
+      {n:'live-demos/'},{n:'case-studies/'},{n:'screenshots/'}
+    ]},
+    {n:'03-products/', c:[
+      {n:'healthcare-crm/'},{n:'reusable-components/'},{n:'ideas-and-research/'}
+    ]},
+    {n:'04-content/', c:[
+      {n:'week-01/', c:[{n:'raw-recordings/'},{n:'edited-exports/'},{n:'captions/'}]},
+      {n:'templates/'},{n:'brand-assets/'}
+    ]},
+    {n:'05-business/', c:[
+      {n:'contracts/'},{n:'invoices/'},
+      {n:'finance-tracker.xlsx'},{n:'proposal-template.docx'},{n:'client-onboarding.md'}
+    ]},
+    {n:'06-learning/', c:[{n:'notes/'},{n:'experiments/'}]}
+  ]}
+];
+const collapsed = new Set();
+function renderFolderNode(node, depth){
+  const isFile = !node.c || node.c.length===0 || node.n.includes('.');
+  const indent = depth*18;
+  if(isFile){
+    return `<div style="padding-left:${indent+18}px;color:var(--text-2);line-height:2">📄 ${node.n}</div>`;
+  }
+  const key = depth+':'+node.n;
+  const open = !collapsed.has(key);
+  return `<div>
+    <div onclick="toggleFolder('${key}')" style="padding-left:${indent}px;cursor:pointer;display:flex;align-items:center;gap:5px;line-height:2;color:var(--accent);user-select:none" onmouseover="this.style.opacity='.7'" onmouseout="this.style.opacity='1'">
+      <span style="font-size:11px">${open?'▾':'▸'}</span>
+      <span>${open?'📂':'📁'} ${node.n}</span>
+    </div>
+    <div id="fc-${key.replace(/[^a-z0-9]/gi,'_')}" style="${open?'':'display:none'}">
+      ${(node.c||[]).map(child=>renderFolderNode(child,depth+1)).join('')}
+    </div>
+  </div>`;
+}
+function renderFolderTree(){
+  document.getElementById('folder-tree').innerHTML = FOLDERS.map(n=>renderFolderNode(n,0)).join('');
+}
+function toggleFolder(key){
+  if(collapsed.has(key)) collapsed.delete(key); else collapsed.add(key);
+  renderFolderTree();
+}
+
+// ── Helpers ────────────────────────────────────────────────
+function fmtDate(str){
+  if(!str) return '';
+  try{
+    const d=new Date(str+'T12:00:00');
+    return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  }catch(e){ return str; }
+}
+function emptyState(msg){
+  return `<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>${msg}</div>`;
+}
+
+// ── Export backup ──────────────────────────────────────────
+function exportData(){
+  const data = { projects, clients, ideas, priorities, schedule, revenue, exportedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'workspace-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  toast('Backup exported.');
+}
+
+// ── Init ───────────────────────────────────────────────────
+updateDashboard();
+renderProjects('all');
+renderClients('all');
+renderIdeas('all');
+buildScheduleTable();
+renderFolderTree();
 </script>
 </body>
 </html>
